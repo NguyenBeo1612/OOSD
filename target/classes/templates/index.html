@@ -1,0 +1,91 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Quản lý thư viện</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #dbe2e6;
+        display: flex;
+        justify-content: center;
+        padding-top: 40px;
+        margin: 0;
+      }
+      .window-frame {
+        background-color: #f0f0f0;
+        border: 1px solid #999;
+        border-radius: 4px;
+        width: 680px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      }
+      .title-bar {
+        background-color: #e3e8ec;
+        padding: 8px 15px;
+        font-size: 14px;
+        font-weight: bold;
+        border-bottom: 1px solid #ccc;
+        color: #333;
+      }
+      .content-area {
+        padding: 30px;
+        border: 1px solid #adadad;
+        margin: 15px;
+        background-color: #ededed;
+      }
+      .main-title {
+        text-align: center;
+        color: #1c4570;
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 35px;
+        letter-spacing: 1px;
+      }
+      .menu-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px 30px;
+        justify-items: center;
+      }
+      .btn-menu {
+        width: 220px;
+        height: 42px;
+        background-color: #ffffff;
+        border: 1px solid #666;
+        border-radius: 4px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        color: #000;
+        box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+      }
+      .btn-menu:hover {
+        background-color: #e2e8f0;
+        border-color: #333;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="window-frame">
+      <div class="title-bar">Quản lý thư viện</div>
+      <div class="content-area">
+        <div class="main-title">HỆ THỐNG QUẢN LÝ THƯ VIỆN</div>
+
+        <div class="menu-grid">
+          <a th:href="@{/nhan-vien}" class="btn-menu">Danh mục / Nhân viên</a>
+          <a th:href="@{/dau-sach}" class="btn-menu">Quản lý đầu sách</a>
+
+          <a th:href="@{/doc-gia}" class="btn-menu">Độc giả và thẻ</a>
+          <a th:href="@{/muon-tra}" class="btn-menu">Mượn - Trả sách</a>
+
+          <a th:href="@{/thong-ke}" class="btn-menu">Thống kê</a>
+          <a th:href="@{/logout}" class="btn-menu">Thoát</a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
