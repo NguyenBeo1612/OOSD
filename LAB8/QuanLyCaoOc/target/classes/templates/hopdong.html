@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lập hợp đồng thuê</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="p-4 bg-light">
+<div class="container bg-white p-4 rounded shadow-sm">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4>3. Lập hợp đồng thuê</h4>
+        <a href="/" class="btn btn-secondary btn-sm">Quay lại Menu</a>
+    </div>
+
+    <form th:action="@{/hop-dong/them}" th:object="${newHopDong}" method="post" class="mb-4">
+        <div class="row g-2">
+            <div class="col-md-3">
+                <label class="form-label">Số hợp đồng</label>
+                <input type="text" th:field="*{soHopDong}" class="form-control form-control-sm" required placeholder="HD2026/03">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Khách hàng</label>
+                <select th:field="*{maKH}" class="form-select form-select-sm" required>
+                    <option value="">-- Chọn khách hàng --</option>
+                    <option th:each="kh : ${dsKhachHang}" th:value="${kh.maKH}" th:text="${kh.tenCongTy}"></option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Mã phòng</label>
+                <select th:field="*{maPhong}" class="form-select form-select-sm" required>
+                    <option value="">-- Chọn phòng --</option>
+                    <option th:each="p : ${dsPhong}" th:value="${p.maPhong}" th:text="${p.maPhong}"></option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Ngày bắt đầu</label>
+                <input type="date" th:field="*{ngayBatDau}" class="form-control form-control-sm" required>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Thời hạn (tháng)</label>
+                <input type="number" th:field="*{thoiHanThue}" class="form-control form-control-sm" value="12" min="6" required>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Đơn giá thuê</label>
+                <input type="number" th:field="*{donGiaThue}" class="form-control form-control-sm" required>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Tổng tiền 6 tháng</label>
+                <input type="number" th:field="*{tongTienThue6Thang}" class="form-control form-control-sm" required>
+            </div>
+            <div class="col-md-3 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary btn-sm w-100">Lập hợp đồng</button>
+            </div>
+        </div>
+    </form>
+
+    <table class="table table-bordered table-sm text-center">
+        <thead class="table-light">
+        <tr>
+            <th>Số HD</th>
+            <th>Khách hàng</th>
+            <th>Mã Phòng</th>
+            <th>Ngày bắt đầu</th>
+            <th>Thời hạn (Tháng)</th>
+            <th>Trạng thái</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="hd : ${dsHopDong}">
+            <td th:text="${hd.soHopDong}">HD2026/01</td>
+            <td th:text="${hd.tenCongTy}">Công ty ABC</td>
+            <td th:text="${hd.maPhong}">P101</td>
+            <td th:text="${hd.ngayBatDau}">2026-01-01</td>
+            <td th:text="${hd.thoiHanThue}">12</td>
+            <td th:text="${hd.trangThai}">Hiệu lực</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
