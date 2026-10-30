@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Quyết định Tuyển dụng & Thử việc - FrmTuyenDung</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #e6e6e6;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 13px;
+        }
+        .window-frame {
+            background-color: #f0f0f0;
+            border: 2px solid #a0a0a0;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            max-width: 950px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        .window-header {
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+        }
+        .window-title {
+            color: #0d3c61;
+            font-weight: bold;
+            font-size: 18px;
+            text-transform: uppercase;
+        }
+        .group-box {
+            border: 1px solid #a0a0a0;
+            background-color: #f9f9f9;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+        .group-box-title {
+            font-weight: bold;
+            color: #0d3c61;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 4px;
+        }
+        .form-label {
+            font-weight: 500;
+            margin-bottom: 2px;
+            color: #333;
+        }
+        .form-control-sm, .form-select-sm {
+            border: 1px solid #707070;
+            border-radius: 0;
+            font-size: 12px;
+            background-color: #fff;
+        }
+        .form-control-sm:focus, .form-select-sm:focus {
+            border-color: #0078d7;
+            box-shadow: none;
+        }
+        .btn-win {
+            background-color: #e1e1e1;
+            border: 1px solid #707070;
+            padding: 4px 20px;
+            font-size: 12px;
+            color: #000;
+            border-radius: 0;
+            min-width: 90px;
+        }
+        .btn-win:hover {
+            background-color: #cecece;
+            border-color: #444;
+            color: #000;
+        }
+        .btn-win-primary {
+            background-color: #d0e1f9;
+            border: 1px solid #4d82cb;
+            font-weight: bold;
+        }
+        .btn-win-primary:hover {
+            background-color: #b2d0f7;
+        }
+    </style>
+</head>
+<body>
+
+<div class="window-frame">
+    <!-- Title Bar -->
+    <div class="window-header d-flex justify-content-between align-items-center">
+        <div>
+            <div class="window-title">LẬP QUYẾT ĐỊNH TUYỂN DỤNG VÀTHỬ VIỆC</div>
+            <small class="text-muted">Nhập đầy đủ thông tin ứng viên và chi tiết thời gian thử việc</small>
+        </div>
+    </div>
+
+    <!-- Thông báo thành công -->
+    <div th:if="${param.success}" class="alert alert-success py-1 px-2 mb-2 rounded-0" style="font-size: 12px;">
+        ✓ Thêm mới nhân viên và lập quyết định thử việc thành công!
+    </div>
+
+    <form th:action="@{/tuyen-dung/luu}" method="post">
+        
+        <!-- Khung 1: Thông tin ứng viên -->
+        <div class="group-box">
+            <div class="group-box-title">1. THÔNG TIN ỨNG VIÊN</div>
+            <div class="row g-2">
+                <div class="col-md-6">
+                    <label class="form-label">Họ và tên *</label>
+                    <input type="text" th:field="${nhanVien.hoTen}" class="form-control form-control-sm" required placeholder="Nhập họ tên ứng viên">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Ngày sinh *</label>
+                    <input type="date" th:field="${nhanVien.ngaySinh}" class="form-control form-control-sm" required>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Giới tính</label>
+                    <select th:field="${nhanVien.gioiTinh}" class="form-select form-select-sm">
+                        <option value="Nam">Nam</option>
+                        <option value="Nữ">Nữ</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Số điện thoại</label>
+                    <input type="text" th:field="${nhanVien.soDienThoai}" class="form-control form-control-sm" placeholder="090xxxxxxx">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Email</label>
+                    <input type="email" th:field="${nhanVien.email}" class="form-control form-control-sm" placeholder="email@donga.com">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Phòng ban tiếp nhận *</label>
+                    <!-- Sửa dùng name trực tiếp để hiển thị mượt 100% -->
+                    <select name="phongBan.maPhongBan" class="form-select form-select-sm" required>
+                        <option value="">-- Chọn phòng ban --</option>
+                        <option th:each="pb : ${dsPhongBan}" 
+                                th:value="${pb.maPhongBan}" 
+                                th:text="${pb.tenPhongBan}"></option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Khung 2: Thông tin thử việc & Lương -->
+        <div class="group-box">
+            <div class="group-box-title">2. THỜI GIAN VÀ MỨC LƯƠNG THỬ VIỆC</div>
+            <div class="row g-2">
+                <div class="col-md-4">
+                    <label class="form-label">Ngày bắt đầu thử việc *</label>
+                    <input type="date" th:field="${quyetDinh.ngayBatDauThuViec}" class="form-control form-control-sm" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Ngày kết thúc thử việc *</label>
+                    <input type="date" th:field="${quyetDinh.ngayKetThucThuViec}" class="form-control form-control-sm" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Lương thử việc (VNĐ) *</label>
+                    <input type="number" th:field="${quyetDinh.luongThuViec}" class="form-control form-control-sm" required placeholder="7000000">
+                </div>
+
+                <div class="col-md-12">
+                    <label class="form-label">Nội dung / Điều khoản hai bên</label>
+                    <textarea th:field="${quyetDinh.noiDungDieuKhoan}" class="form-control form-control-sm" rows="3" placeholder="Ghi rõ điều khoản thỏa thuận giữa nhà tuyển dụng và người thử việc..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Thanh nút bấm chuẩn WinForms -->
+        <div class="d-flex justify-content-end gap-2 mt-3 pt-2 border-top">
+            <button type="submit" class="btn btn-win btn-win-primary">Lưu Quyết Định</button>
+            <a href="/tuyen-dung" class="btn btn-win text-center text-decoration-none">Làm Mới</a>
+            <a href="/" class="btn btn-win text-center text-decoration-none">Đóng</a>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Quyết Định Khen Thưởng - FrmKhenThuong</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #e6e6e6;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 13px;
+        }
+        .window-frame {
+            background-color: #f0f0f0;
+            border: 2px solid #a0a0a0;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        .window-header {
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+        }
+        .window-title {
+            color: #0d3c61;
+            font-weight: bold;
+            font-size: 18px;
+            text-transform: uppercase;
+        }
+        .group-box {
+            border: 1px solid #a0a0a0;
+            background-color: #f9f9f9;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+        .group-box-title {
+            font-weight: bold;
+            color: #0d3c61;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 4px;
+        }
+        .form-label {
+            font-weight: 500;
+            margin-bottom: 2px;
+            color: #333;
+        }
+        .form-control-sm, .form-select-sm {
+            border: 1px solid #707070;
+            border-radius: 0;
+            font-size: 12px;
+            background-color: #fff;
+        }
+        .form-control-sm:focus, .form-select-sm:focus {
+            border-color: #0078d7;
+            box-shadow: none;
+        }
+        .btn-win {
+            background-color: #e1e1e1;
+            border: 1px solid #707070;
+            padding: 4px 20px;
+            font-size: 12px;
+            color: #000;
+            border-radius: 0;
+            min-width: 90px;
+        }
+        .btn-win:hover {
+            background-color: #cecece;
+            border-color: #444;
+            color: #000;
+        }
+        .btn-win-primary {
+            background-color: #d0e1f9;
+            border: 1px solid #4d82cb;
+            font-weight: bold;
+        }
+        .btn-win-primary:hover {
+            background-color: #b2d0f7;
+        }
+    </style>
+</head>
+<body>
+
+<div class="window-frame">
+    <!-- Header -->
+    <div class="window-header">
+        <div class="window-title">QUẢN LÝ KHEN THƯỞNG</div>
+        <small class="text-muted">Lập quyết định khen thưởng cho Cá nhân / Tập thể phòng ban</small>
+    </div>
+
+    <!-- Thông báo thành công -->
+    <div th:if="${param.success}" class="alert alert-success py-1 px-2 mb-2 rounded-0" style="font-size: 12px;">
+        ✓ Lưu quyết định khen thưởng thành công!
+    </div>
+
+    <form th:action="@{/khen-thuong/luu}" method="post">
+        
+        <!-- Khung 1: ĐỐI TƯỢNG KHEN THƯỞNG -->
+        <div class="group-box">
+            <div class="group-box-title">1. ĐỐI TƯỢNG KHEN THƯỞNG</div>
+            <div class="mb-2">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" th:field="${ktkl.doiTuong}" value="Cá nhân" id="rdCaNhan" checked>
+                    <label class="form-check-label" for="rdCaNhan">Cá nhân Nhân viên</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" th:field="${ktkl.doiTuong}" value="Tập thể" id="rdTapThe">
+                    <label class="form-check-label" for="rdTapThe">Tập thể Phòng ban</label>
+                </div>
+            </div>
+
+            <div class="row g-2 mt-1">
+                <div class="col-md-6">
+                    <label class="form-label">Chọn Nhân viên (Nếu thưởng cá nhân)</label>
+                    <select name="nhanVien.maNV" class="form-select form-select-sm">
+                        <option value="">-- Chọn nhân viên --</option>
+                        <option th:each="nv : ${dsNhanVien}" 
+                                th:value="${nv.maNV}" 
+                                th:text="${nv.hoTen + ' - ' + (nv.phongBan != null ? nv.phongBan.tenPhongBan : '')}"></option>
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Chọn Phòng ban (Nếu thưởng tập thể)</label>
+                    <select name="phongBan.maPhongBan" class="form-select form-select-sm">
+                        <option value="">-- Chọn phòng ban --</option>
+                        <option th:each="pb : ${dsPhongBan}" 
+                                th:value="${pb.maPhongBan}" 
+                                th:text="${pb.tenPhongBan}"></option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Khung 2: NỘI DUNG VÀ CHI PHÍ -->
+        <div class="group-box">
+            <div class="group-box-title">2. THÔNG TIN QUYẾT ĐỊNH</div>
+            <div class="row g-2">
+                <div class="col-md-6">
+                    <label class="form-label">Số tiền khen thưởng (VNĐ) *</label>
+                    <input type="number" th:field="${ktkl.soTien}" class="form-control form-control-sm" required placeholder="Nhập số tiền thưởng">
+                </div>
+
+                <div class="col-md-12">
+                    <label class="form-label">Lý do khen thưởng *</label>
+                    <textarea th:field="${ktkl.lyDo}" class="form-control form-control-sm" rows="3" required placeholder="Nhập chi tiết lý do thành tích khen thưởng..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Thanh nút bấm WinForms -->
+        <div class="d-flex justify-content-end gap-2 mt-3 pt-2 border-top">
+            <button type="submit" class="btn btn-win btn-win-primary">Tạo Quyết Định & Xuất Phiếu Chi</button>
+            <a href="/khen-thuong" class="btn btn-win text-center text-decoration-none">Làm Mới</a>
+            <a href="/" class="btn btn-win text-center text-decoration-none">Đóng</a>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>
