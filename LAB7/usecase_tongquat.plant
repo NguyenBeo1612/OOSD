@@ -1,0 +1,63 @@
+text
+
+@startuml
+left to right direction
+
+actor "Giám đốc" as GD
+actor "Nhân viên nhân sự" as NS
+actor "Ban chấm công" as CC
+actor "Trưởng phòng" as TP
+actor "Kế toán" as KT
+actor "Nhân viên" as NV
+
+rectangle "HỆ THỐNG QUẢN LÝ NHÂN SỰ" {
+  usecase "Quản lý nhân viên" as UC1
+  usecase "Quản lý phòng ban" as UC2
+  usecase "Quản lý tuyển dụng" as UC3
+  usecase "Quản lý hợp đồng" as UC4
+  usecase "Quản lý quyết định lương" as UC5
+  usecase "Quản lý chức vụ" as UC6
+  usecase "Quản lý bảo hiểm" as UC7
+  usecase "Lập kế hoạch phân công" as UC8
+  usecase "Chấm công" as UC9
+  usecase "Lập phiếu phụ trội" as UC10
+  usecase "Lập bảng lương" as UC11
+  usecase "Tính lương" as UC12
+  usecase "Khen thưởng" as UC13
+  usecase "Kỷ luật" as UC14
+  usecase "Lập phiếu chi" as UC15
+  usecase "Lập phiếu thu" as UC16
+  usecase "Duyệt quyết định" as UC17
+}
+
+NS --> UC1
+NS --> UC2
+NS --> UC3
+NS --> UC4
+NS --> UC5
+NS --> UC6
+NS --> UC7
+
+TP --> UC8
+TP --> UC13
+TP --> UC14
+
+CC --> UC9
+CC --> UC10
+
+KT --> UC11
+KT --> UC12
+KT --> UC15
+KT --> UC16
+
+GD --> UC17
+GD --> UC13
+GD --> UC14
+
+NV --> UC1
+NV --> UC4
+
+UC11 .> UC12 : <<include>>
+UC13 .> UC15 : <<include>>
+UC14 .> UC16 : <<include>>
+@enduml

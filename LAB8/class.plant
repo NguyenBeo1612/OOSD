@@ -1,0 +1,150 @@
+text
+
+@startuml
+class ToaNha {
+  -maToaNha: String
+  -tenToaNha: String
+  -diaChi: String
+  +themTang()
+}
+
+class Tang {
+  -maTang: String
+  -soThuTu: int
+  +themPhong()
+}
+
+class Phong {
+  -maPhong: String
+  -dienTich: double
+  -huong: String
+  -donGiaThue: double
+  -trangThai: String
+  +capNhatGiaThue()
+  +kiemTraTinhTrang()
+}
+
+class KhachHang {
+  -maKhachHang: String
+  -tenKhachHang: String
+  -soDienThoai: String
+  +thueVanPhong()
+}
+
+class HopDong {
+  -maHopDong: String
+  -ngayLap: Date
+  -ngayBatDau: Date
+  -ngayKetThuc: Date
+  -trangThai: String
+  +lapHopDong()
+  +tinhTienThue()
+}
+
+class ChiTietHopDong {
+  -maChiTiet: String
+  -donGiaThue: double
+  -thoiHanThue: int
+  +tinhTienThuePhong()
+}
+
+class PhieuGiaHan {
+  -maPhieuGiaHan: String
+  -ngayLap: Date
+  -thoiGianGiaHan: int
+  -ngayKetThucGiaHan: Date
+  +kiemTraThoiGianGiaHan()
+  +lapPhieuGiaHan()
+}
+
+class CongTy {
+  -maCongTy: String
+  -tenCongTy: String
+  +dangKyNhanVien()
+}
+
+class NhanVien {
+  -maNhanVien: String
+  -hoTen: String
+  -hinhAnh: String
+  -chucVu: String
+  +themNhanVien()
+}
+
+class TheGiuXe {
+  -maThe: String
+  -bienSoXe: String
+  -loaiXe: String
+  +capThe()
+}
+
+class DichVu {
+  -maDichVu: String
+  -tenDichVu: String
+  -donGia: double
+}
+
+class HoaDonDichVu {
+  -maHoaDonDV: String
+  -ngayLap: Date
+  -tongTien: double
+  -trangThai: String
+  +lapHoaDon()
+  +thanhToan()
+}
+
+class ChiTietDichVu {
+  -maChiTietDV: String
+  -soLuong: double
+  -donGia: double
+  -thanhTien: double
+}
+
+class HoaDonThue {
+  -maHoaDonThue: String
+  -kyThanhToan: String
+  -soTien: double
+  -trangThai: String
+  +lapHoaDon()
+}
+
+class PhieuThanhToan {
+  -maThanhToan: String
+  -ngayThanhToan: Date
+  -soTien: double
+  -hinhThuc: String
+  +xacNhanThanhToan()
+}
+
+class PhieuKiemTra {
+  -maPhieuKT: String
+  -ngayKiemTra: Date
+  -ketQua: String
+  +ghiNhanKetQua()
+}
+
+class PhieuPhat {
+  -maPhieuPhat: String
+  -lyDoPhat: String
+  -soTienPhat: double
+  +lapPhieuPhat()
+}
+
+ToaNha "1" *-- "1..*" Tang
+Tang "1" *-- "1..*" Phong
+KhachHang "1" -- "0..*" HopDong
+HopDong "1" *-- "1..*" ChiTietHopDong
+Phong "1" -- "0..*" ChiTietHopDong
+ChiTietHopDong "1" -- "0..*" PhieuGiaHan
+CongTy "1" -- "0..*" NhanVien
+Phong "1" -- "0..*" NhanVien
+NhanVien "1" -- "0..1" TheGiuXe
+ChiTietHopDong "1" -- "0..*" HoaDonThue
+ChiTietHopDong "1" -- "0..*" HoaDonDichVu
+HoaDonDichVu "1" *-- "1..*" ChiTietDichVu
+DichVu "1" -- "0..*" ChiTietDichVu
+HoaDonThue "1" -- "0..*" PhieuThanhToan
+HoaDonDichVu "1" -- "0..*" PhieuThanhToan
+Phong "1" -- "0..*" PhieuKiemTra
+Phong "1" -- "0..*" PhieuPhat
+@enduml

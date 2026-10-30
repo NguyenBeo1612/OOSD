@@ -1,0 +1,40 @@
+text
+
+@startuml
+
+actor "Trưởng phòng" as TP
+actor "Giám đốc" as GD
+actor "Kế toán" as KT
+
+boundary "Giao diện quản lý nhân sự" as UI
+control "Quản lý khen thưởng" as QLKT
+database "Cơ sở dữ liệu" as DB
+
+TP -> UI : Gửi đề xuất khen thưởng
+UI -> QLKT : Tiếp nhận đề xuất
+QLKT -> DB : Kiểm tra nhân viên/phòng ban
+DB --> QLKT : Trả về thông tin
+
+QLKT --> UI : Hiển thị thông tin đối tượng
+TP -> UI : Nhập lý do, hình thức, số tiền
+UI -> QLKT : Gửi thông tin khen thưởng
+
+QLKT -> QLKT : Lập quyết định khen thưởng
+QLKT -> GD : Gửi quyết định chờ duyệt
+
+GD -> QLKT : Kiểm tra và phê duyệt
+
+alt Được phê duyệt
+    QLKT -> DB : Lưu quyết định khen thưởng
+    DB --> QLKT : Xác nhận lưu thành công
+    QLKT -> KT : Yêu cầu lập phiếu chi
+    KT -> UI : Nhập thông tin phiếu chi
+    UI -> QLKT : Gửi phiếu chi
+    QLKT -> DB : Lưu phiếu chi
+    DB --> QLKT : Xác nhận lưu thành công
+    QLKT --> KT : Hoàn tất nghiệp vụ
+else Không được phê duyệt
+    QLKT --> TP : Thông báo quyết định bị từ chối
+end
+
+@enduml

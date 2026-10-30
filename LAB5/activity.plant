@@ -1,0 +1,46 @@
+text
+
+@startuml
+|Bệnh nhân|
+start
+:Đến bệnh viện;
+
+|Nhân viên tiếp nhận|
+:Tiếp nhận thông tin;
+:Kiểm tra hồ sơ bệnh nhân;
+
+if (Bệnh nhân mới?) then (Có)
+  :Lập phiếu đăng ký;
+  :Thu lệ phí năm;
+  :Tạo hồ sơ bệnh án;
+  :Cấp mã hồ sơ;
+else (Không)
+  :Tra cứu hồ sơ bệnh án;
+endif
+
+:Đăng ký khám;
+
+|Bác sĩ|
+:Xem hồ sơ bệnh án;
+:Khám bệnh;
+:Ghi nhận triệu chứng;
+
+if (Cần xét nghiệm?) then (Có)
+  :Chỉ định xét nghiệm;
+
+  |Nhân viên xét nghiệm|
+  :Thực hiện xét nghiệm;
+  :Cập nhật kết quả;
+
+  |Bác sĩ|
+  :Xem kết quả xét nghiệm;
+else (Không)
+endif
+
+:Chẩn đoán bệnh;
+:Lập toa thuốc;
+
+|Bệnh nhân|
+:Nhận toa thuốc;
+stop
+@enduml

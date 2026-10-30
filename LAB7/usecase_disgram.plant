@@ -1,0 +1,45 @@
+text
+
+@startuml
+left to right direction
+
+actor "Nhân viên nhân sự" as NS
+actor "Giám đốc" as GD
+actor "Trưởng phòng" as TP
+actor "Nhân viên thử việc" as NV
+
+rectangle "Quy trình tuyển dụng và ký hợp đồng" {
+  usecase "Tiếp nhận nhân viên mới" as UC1
+  usecase "Kiểm tra nhu cầu tuyển dụng" as UC2
+  usecase "Lập quyết định tuyển dụng" as UC3
+  usecase "Ký quyết định tuyển dụng" as UC4
+  usecase "Thực hiện thử việc" as UC5
+  usecase "Đánh giá kết quả thử việc" as UC6
+  usecase "Lập hợp đồng chính thức" as UC7
+  usecase "Ký hợp đồng" as UC8
+  usecase "Đăng ký bảo hiểm" as UC9
+  usecase "Cập nhật hồ sơ nhân viên" as UC10
+  usecase "Thông báo không đạt" as UC11
+}
+
+NS --> UC1
+NS --> UC2
+NS --> UC3
+GD --> UC4
+NV --> UC5
+TP --> UC6
+NS --> UC7
+GD --> UC8
+NS --> UC9
+NS --> UC10
+NV --> UC11
+
+UC3 .> UC2 : <<include>>
+UC4 .> UC3 : <<include>>
+UC6 .> UC5 : <<include>>
+UC7 .> UC6 : <<extend>>
+UC9 .> UC8 : <<extend>>
+UC10 .> UC8 : <<include>>
+UC11 .> UC6 : <<extend>>
+
+@enduml

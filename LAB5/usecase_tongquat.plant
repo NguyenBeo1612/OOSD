@@ -1,0 +1,55 @@
+text
+
+@startuml
+left to right direction
+
+actor "Bệnh nhân" as BN
+actor "Nhân viên tiếp nhận" as TN
+actor "Bác sĩ" as BS
+actor "Nhân viên xét nghiệm" as XN
+actor "Nhân viên CSKH" as CS
+actor "Nhân viên thu ngân" as NV
+
+rectangle "HỆ THỐNG QUẢN LÝ BỆNH ÁN" {
+ usecase "Quản lý bệnh nhân" as UC1
+ usecase "Đăng ký khám bệnh" as UC2
+ usecase "Quản lý hồ sơ bệnh án" as UC3
+ usecase "Tra cứu hồ sơ" as UC4
+ usecase "Khám bệnh" as UC5
+ usecase "Chẩn đoán bệnh" as UC6
+ usecase "Lập toa thuốc" as UC7
+ usecase "Chỉ định xét nghiệm" as UC8
+ usecase "Cập nhật kết quả xét nghiệm" as UC9
+ usecase "Quản lý thuốc" as UC10
+ usecase "Thu lệ phí" as UC11
+ usecase "Thanh toán viện phí" as UC12
+ usecase "Quản lý lịch hẹn" as UC13
+ usecase "Khám sức khỏe định kỳ" as UC14
+ usecase "Theo dõi lịch sử điều trị" as UC15
+}
+
+BN -- UC2
+BN -- UC4
+BN -- UC13
+BN -- UC14
+TN -- UC1
+TN -- UC2
+TN -- UC3
+BS -- UC4
+BS -- UC5
+BS -- UC6
+BS -- UC7
+BS -- UC8
+BS -- UC15
+XN -- UC9
+CS -- UC13
+CS -- UC14
+NV -- UC11
+NV -- UC12
+
+UC5 ..> UC6 : <<include>>
+UC5 ..> UC8 : <<extend>>
+UC5 ..> UC7 : <<extend>>
+UC14 ..> UC5 : <<include>>
+
+@enduml

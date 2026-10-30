@@ -1,0 +1,125 @@
+text
+
+@startuml
+skinparam classAttributeIconSize 0
+
+class BenhNhan {
+  - maBN: String
+  - hoTen: String
+  - diaChi: String
+  - ngaySinh: Date
+  - soDienThoai: String
+  - anhDaiDien: String
+  + dangKyKham()
+  + traCuuHoSo()
+  + datLichKham()
+}
+
+class PhieuDangKy {
+  - maPhieuDK: String
+  - ngayDangKy: Date
+  - trangThai: String
+  + taoPhieu()
+  + xacNhanDangKy()
+}
+
+class HoSoBenhAn {
+  - maHS: String
+  - ngayLap: Date
+  - trangThai: String
+  + taoHoSo()
+  + traCuuHoSo()
+  + xemLichSuDieuTri()
+}
+
+class PhieuKham {
+  - maPK: String
+  - ngayGioKham: DateTime
+  - trieuChung: String
+  - nhietDo: Float
+  - huyetAp: String
+  - chanDoan: String
+  - loaiKham: String
+  + taoPhieuKham()
+  + ghiNhanKetQua()
+}
+
+class BacSi {
+  - maBS: String
+  - hoTen: String
+  - chuyenKhoa: String
+  + khamBenh()
+  + chanDoanBenh()
+  + lapToaThuoc()
+}
+
+class Khoa {
+  - maKhoa: String
+  - tenKhoa: String
+  + themKhoa()
+  + capNhatKhoa()
+}
+
+class ToaThuoc {
+  - maToa: String
+  - ngayKeToa: Date
+  - loiDan: String
+  + taoToaThuoc()
+  + tinhTongTien()
+}
+
+class Thuoc {
+  - maThuoc: String
+  - tenThuoc: String
+  - donGia: Decimal
+  + traCuuThuoc()
+}
+
+class ChiTietToaThuoc {
+  - maCTToa: String
+  - soLuong: Integer
+  - lieuDung: String
+  - cachDung: String
+  - soNgayDung: Integer
+  + tinhThanhTien()
+}
+
+class XetNghiem {
+  - maXN: String
+  - tenXetNghiem: String
+  - ketQua: String
+  + taoChiDinh()
+  + capNhatKetQua()
+}
+
+class LePhi {
+  - maLP: String
+  - soTien: Decimal
+  - ngayDong: Date
+  - namApDung: Integer
+  + thuLePhi()
+  + kiemTraHanPhi()
+}
+
+class LichHen {
+  - maLichHen: String
+  - ngayHen: Date
+  - gioHen: Time
+  - trangThai: String
+  + datLichHen()
+  + huyLichHen()
+}
+
+BenhNhan "1" -- "1" PhieuDangKy
+BenhNhan "1" -- "1" HoSoBenhAn
+BenhNhan "1" -- "*" LePhi
+BenhNhan "1" -- "*" LichHen
+HoSoBenhAn "1" -- "*" PhieuKham
+BacSi "1" -- "*" PhieuKham
+Khoa "1" -- "*" PhieuKham
+PhieuKham "1" -- "0..1" ToaThuoc
+PhieuKham "1" -- "*" XetNghiem
+ToaThuoc "1" -- "*" ChiTietToaThuoc
+Thuoc "1" -- "*" ChiTietToaThuoc
+
+@enduml

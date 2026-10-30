@@ -1,0 +1,56 @@
+text
+
+@startuml
+|Nhân viên nhân sự|
+start
+:Tiếp nhận thông tin nhân viên;
+:Kiểm tra nhu cầu tuyển dụng;
+
+if (Có nhu cầu tuyển dụng?) then (Có)
+  :Lập quyết định tuyển dụng;
+  :Ghi thời gian thử việc;
+  :Ghi mức lương thử việc;
+else (Không)
+  :Thông báo chưa tuyển dụng;
+  stop
+endif
+
+|Giám đốc|
+:Kiểm tra quyết định;
+if (Đồng ý?) then (Có)
+  :Ký quyết định tuyển dụng;
+else (Không)
+  :Từ chối quyết định;
+  stop
+endif
+
+|Nhân viên thử việc|
+:Bắt đầu thử việc;
+
+|Trưởng phòng|
+:Theo dõi quá trình thử việc;
+:Đánh giá kết quả thử việc;
+
+if (Đạt yêu cầu?) then (Có)
+  |Nhân viên nhân sự|
+  :Lập hợp đồng chính thức;
+  :Xác định loại hợp đồng;
+
+  |Giám đốc|
+  :Ký hợp đồng chính thức;
+
+  |Nhân viên nhân sự|
+  if (Hợp đồng dài hạn?) then (Có)
+    :Đăng ký BHXH;
+    :Đăng ký BHYT;
+  endif
+  :Cập nhật hồ sơ nhân viên;
+  :Thông báo nhân viên chính thức;
+  stop
+else (Không)
+  |Nhân viên nhân sự|
+  :Thông báo kết quả không đạt;
+  :Kết thúc thử việc;
+  stop
+endif
+@enduml

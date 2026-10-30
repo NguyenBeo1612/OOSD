@@ -1,0 +1,59 @@
+text
+
+@startuml
+title SEQUENCE DIAGRAM - LAP PHIEU GIA HAN
+
+actor "Khách hàng" as KH
+boundary "Giao diện quản lý" as UI
+control "Nhân viên quản lý" as QL
+control "Hệ thống gia hạn" as HT
+database "CSDL hợp đồng" as HD
+database "CSDL thanh toán" as TT
+database "CSDL phiếu gia hạn" as PGH
+
+KH -> UI: Yêu cầu gia hạn thuê văn phòng
+UI -> QL: Tiếp nhận yêu cầu gia hạn
+QL -> UI: Nhập mã hợp đồng, mã phòng,\nthời gian gia hạn
+UI -> HT: GuiYeuCauGiaHan()
+
+HT -> HD: TimHopDong(maHopDong, maPhong)
+HD --> HT: ThongTinHopDong
+
+HT -> HT: KiemTraThoiHanGiaHan()
+
+alt Thời gian gia hạn > 1/2 thời gian thuê
+    HT --> UI: Thông báo thời gian gia hạn không hợp lệ
+    UI --> KH: Từ chối gia hạn
+else Thời gian gia hạn hợp lệ
+
+    HT -> TT: KiemTraNoTienThue(maPhong)
+    TT --> HT: KetQuaNoTienThue
+
+    alt Còn nợ tiền thuê
+        HT --> UI: Thông báo còn nợ tiền thuê
+        UI --> KH: Yêu cầu thanh toán tiền thuê
+    else Không còn nợ tiền thuê
+
+        HT -> TT: KiemTraNoDichVu(maPhong)
+        TT --> HT: KetQuaNoDichVu
+
+        alt Còn nợ dịch vụ
+            HT --> UI: Thông báo còn nợ dịch vụ
+            UI --> KH: Yêu cầu thanh toán dịch vụ
+        else Đã thanh toán đầy đủ dịch vụ
+
+            HT -> HT: TinhNgayKetThucMoi()
+            HT -> PGH: LuuPhieuGiaHan()
+            PGH --> HT: XacNhanLuuThanhCong()
+
+            HT -> HD: CapNhatNgayKetThucHopDong()
+            HD --> HT: XacNhanCapNhat()
+
+            HT --> UI: Thông báo gia hạn thành công
+            UI --> KH: Hiển thị phiếu gia hạn
+
+        end
+    end
+end
+
+@enduml>

@@ -1,0 +1,56 @@
+text
+
+@startuml
+left to right direction
+
+actor "Khách hàng" as KH
+actor "Nhân viên quản lý" as QL
+
+rectangle "QUẢN LÝ THUÊ VĂN PHÒNG VÀ THANH TOÁN" {
+
+  usecase "Tra cứu phòng" as UC1
+  usecase "Chọn phòng thuê" as UC2
+  usecase "Kiểm tra phòng" as UC3
+  usecase "Lập hợp đồng" as UC4
+  usecase "Kiểm tra thời hạn thuê" as UC5
+  usecase "Tính tiền thuê" as UC6
+  usecase "Ký hợp đồng" as UC7
+  usecase "Thanh toán 6 tháng đầu" as UC8
+  usecase "Lập hóa đơn thuê" as UC9
+  usecase "Thanh toán tiền thuê hàng tháng" as UC10
+  usecase "Ghi nhận sử dụng dịch vụ" as UC11
+  usecase "Tính tiền dịch vụ" as UC12
+  usecase "Lập hóa đơn dịch vụ" as UC13
+  usecase "Thanh toán hóa đơn dịch vụ" as UC14
+  usecase "Xác nhận thanh toán" as UC15
+}
+
+KH -- UC1
+KH -- UC2
+KH -- UC7
+KH -- UC8
+KH -- UC10
+KH -- UC14
+
+QL -- UC1
+QL -- UC3
+QL -- UC4
+QL -- UC6
+QL -- UC9
+QL -- UC10
+QL -- UC11
+QL -- UC12
+QL -- UC13
+QL -- UC15
+
+UC4 ..> UC3 : <<include>>
+UC4 ..> UC5 : <<include>>
+UC4 ..> UC6 : <<include>>
+UC4 ..> UC8 : <<include>>
+UC4 ..> UC7 : <<include>>
+
+UC10 ..> UC9 : <<include>>
+UC13 ..> UC12 : <<include>>
+UC14 ..> UC15 : <<include>>
+
+@enduml

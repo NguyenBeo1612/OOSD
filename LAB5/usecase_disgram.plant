@@ -1,0 +1,64 @@
+text
+
+@startuml
+left to right direction
+
+actor "Bệnh nhân" as BN
+actor "Nhân viên tiếp nhận" as TN
+actor "Bác sĩ" as BS
+actor "Nhân viên xét nghiệm" as XN
+
+rectangle "QUY TRÌNH KHÁM BỆNH" {
+ usecase "Tiếp nhận bệnh nhân" as A
+ usecase "Kiểm tra thông tin" as B
+ usecase "Đăng ký bệnh nhân mới" as C
+ usecase "Lập phiếu đăng ký" as D
+ usecase "Đóng lệ phí năm" as E
+ usecase "Cấp hồ sơ bệnh án" as F
+ usecase "Tra cứu hồ sơ cũ" as G
+ usecase "Đăng ký khám" as H
+ usecase "Xem lịch sử bệnh án" as I
+ usecase "Khám bệnh" as J
+ usecase "Ghi nhận triệu chứng" as K
+ usecase "Chỉ định xét nghiệm" as L
+ usecase "Thực hiện xét nghiệm" as M
+ usecase "Cập nhật kết quả" as N
+ usecase "Chẩn đoán bệnh" as O
+ usecase "Lập toa thuốc" as P
+ usecase "Nhận toa thuốc" as Q
+}
+
+BN -- A
+BN -- H
+BN -- E
+BN -- Q
+
+TN -- A
+TN -- C
+TN -- D
+TN -- E
+TN -- F
+TN -- G
+TN -- H
+
+BS -- I
+BS -- J
+BS -- K
+BS -- L
+BS -- O
+BS -- P
+
+XN -- M
+XN -- N
+
+A ..> B : <<include>>
+C ..> D : <<include>>
+C ..> E : <<include>>
+C ..> F : <<include>>
+J ..> I : <<include>>
+J ..> K : <<include>>
+L ..> M : <<include>>
+M ..> N : <<include>>
+P ..> O : <<include>>
+
+@enduml

@@ -1,0 +1,43 @@
+text
+
+@startuml
+
+actor "Bác sĩ" as BS
+actor "Bệnh nhân" as BN
+boundary "Giao diện khám bệnh" as UI
+control "Hệ thống quản lý bệnh án" as HT
+database "Cơ sở dữ liệu thuốc" as DB
+
+BS -> UI: Mở hồ sơ bệnh án
+UI -> HT: Yêu cầu thông tin bệnh nhân
+HT -> HT: Truy xuất hồ sơ bệnh án
+HT --> UI: Hiển thị hồ sơ và kết quả khám
+UI --> BS: Hiển thị thông tin
+
+BS -> UI: Chọn chức năng lập toa thuốc
+UI -> HT: Yêu cầu danh sách thuốc
+HT -> DB: Truy vấn danh sách thuốc
+DB --> HT: Trả về danh sách thuốc
+HT --> UI: Hiển thị danh sách thuốc
+UI --> BS: Chọn thuốc
+
+BS -> UI: Nhập liều dùng, số lượng,\ncách dùng, số ngày
+UI -> HT: Gửi thông tin toa thuốc
+
+HT -> DB: Kiểm tra thông tin thuốc
+DB --> HT: Trả về kết quả kiểm tra
+
+alt Thông tin hợp lệ
+ HT -> HT: Tạo mã toa thuốc
+ HT -> HT: Tính tổng tiền
+ HT -> DB: Lưu toa thuốc
+ DB --> HT: Xác nhận lưu thành công
+ HT --> UI: Thông báo lập toa thành công
+ UI --> BS: Hiển thị toa thuốc
+ BS --> BN: Gửi toa thuốc cho bệnh nhân
+else Thông tin không hợp lệ
+ HT --> UI: Thông báo lỗi
+ UI --> BS: Yêu cầu kiểm tra lại
+end
+
+@enduml

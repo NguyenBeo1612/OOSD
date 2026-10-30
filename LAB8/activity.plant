@@ -1,0 +1,88 @@
+text
+
+@startuml
+title ACTIVITY DIAGRAM - QUẢN LÝ THUÊ VĂN PHÒNG VÀ THANH TOÁN
+
+|Khách hàng|
+start
+:Đến tòa nhà tham khảo phòng;
+
+|Nhân viên quản lý|
+:Cung cấp thông tin phòng;
+:Cung cấp diện tích và giá thuê;
+
+|Khách hàng|
+:Chọn một hoặc nhiều phòng;
+
+|Nhân viên quản lý|
+:Kiểm tra tình trạng phòng;
+
+while (Phòng còn trống?) is (Không)
+  |Khách hàng|
+  :Chọn phòng khác;
+  |Nhân viên quản lý|
+  :Kiểm tra lại phòng;
+endwhile (Có)
+
+|Khách hàng|
+:Đăng ký thời hạn thuê;
+
+|Nhân viên quản lý|
+:Kiểm tra thời hạn thuê;
+
+while (Thời hạn thuê >= 6 tháng?) is (Không)
+  |Khách hàng|
+  :Điều chỉnh thời hạn thuê;
+  |Nhân viên quản lý|
+  :Kiểm tra lại thời hạn;
+endwhile (Có)
+
+:Tính tiền thuê;
+:Lập hợp đồng;
+
+|Khách hàng|
+:Kiểm tra và ký hợp đồng;
+:Thanh toán tiền thuê 6 tháng đầu;
+
+|Nhân viên quản lý|
+:Xác nhận thanh toán;
+:Cập nhật hợp đồng;
+:Cập nhật trạng thái phòng;
+
+|Khách hàng|
+:Nhận bàn giao văn phòng;
+
+|Nhân viên quản lý|
+:Theo dõi thời gian thuê;
+
+while (Còn thời gian thuê?) is (Có)
+  :Đến đầu tháng thứ 7 hoặc tháng tiếp theo;
+  :Lập hóa đơn tiền thuê;
+
+  |Khách hàng|
+  :Thanh toán tiền thuê;
+
+  |Nhân viên quản lý|
+  :Xác nhận thanh toán tiền thuê;
+
+  :Theo dõi sử dụng dịch vụ trong tháng;
+  :Đến cuối tháng;
+  :Tổng hợp chi phí dịch vụ;
+  :Lập hóa đơn dịch vụ;
+
+  |Khách hàng|
+  :Thanh toán hóa đơn dịch vụ;
+
+  |Nhân viên quản lý|
+  :Xác nhận thanh toán dịch vụ;
+  :Cập nhật công nợ;
+
+  |Khách hàng|
+endwhile (Không)
+
+|Nhân viên quản lý|
+:Kết thúc hợp đồng;
+:Cập nhật trạng thái phòng;
+
+stop
+@enduml
