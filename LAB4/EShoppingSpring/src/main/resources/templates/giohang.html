@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Giỏ hàng')}"></head>
+<body>
+<header th:replace="~{fragments :: nav}"></header>
+<main class="page">
+    <h1>Giỏ hàng</h1>
+    <div th:replace="~{fragments :: flash}"></div>
+    <div class="card" th:if="${gio.rong}"><p class="muted">Giỏ hàng đang rỗng. <a th:href="@{/}">Tiếp tục mua sắm</a></p></div>
+    <div class="card" th:unless="${gio.rong}">
+        <table><thead><tr><th></th><th>Sản phẩm</th><th>Đơn giá</th><th>Số lượng</th><th>Thành tiền</th><th></th></tr></thead><tbody>
+        <tr th:each="m : ${gio.danhSach}">
+            <td><img class="thumb" th:src="@{${m.hinh}}" alt=""></td>
+            <td><a th:href="@{/san-pham/{s}(s=${m.maSP})}" th:text="${m.tenSP}"></a></td>
+            <td th:text="${#numbers.formatDecimal(m.donGia,1,'COMMA',0,'POINT')}"></td>
+            <td><form class="row" th:action="@{/gio-hang/cap-nhat}" method="post">
+                <input type="hidden" name="maSP" th:value="${m.maSP}">
+                <input type="number" name="soLuong" th:value="${m.soLuong}" min="0" style="width:80px">
+                <button class="btn ghost small">Cập nhật</button></form></td>
+            <td th:text="${#numbers.formatDecimal(m.thanhTien,1,'COMMA',0,'POINT')}"></td>
+            <td><form th:action="@{/gio-hang/xoa}" method="post"><input type="hidden" name="maSP" th:value="${m.maSP}">
+                <button class="btn danger small">Loại bỏ</button></form></td>
+        </tr></tbody></table>
+        <div class="total-row">
+            <span>Tổng tiền hàng: <b class="price big" th:text="${#numbers.formatDecimal(gio.tongTien,1,'COMMA',0,'POINT')} + ' đ'"></b></span>
+            <a class="btn" th:href="@{/dat-hang}">Tính tiền →</a>
+        </div>
+        <p class="hint">Đơn giá được cập nhật theo giá bán hiện hành. Đặt số lượng 0 để loại sản phẩm.</p>
+    </div>
+</main>
+</body>
+</html>

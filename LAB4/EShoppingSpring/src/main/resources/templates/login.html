@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Đăng nhập')}"></head>
+<body>
+<header th:replace="~{fragments :: nav}"></header>
+<main class="page narrow">
+    <div class="card stack">
+        <h1>Đăng nhập</h1>
+        <div th:replace="~{fragments :: flash}"></div>
+        <div class="alert err" th:if="${param.error}">Sai tên đăng nhập hoặc mật khẩu.</div>
+        <form th:action="@{/login}" method="post" class="stack">
+            <label>Tên đăng nhập <input name="username" autofocus required></label>
+            <label>Mật khẩu <input name="password" type="password" required></label>
+            <button type="submit" class="btn">Đăng nhập</button>
+        </form>
+        <p>Chưa có tài khoản? <a th:href="@{/dang-ky}">Đăng ký khách hàng mới</a></p>
+        <p class="hint">Tài khoản mẫu: khách <b>khang</b> / 123456 · nhân viên <b>nhanvien</b> / 123456</p>
+    </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Sản phẩm')}"></head>
+<body>
+<header th:replace="~{fragments :: nav}"></header>
+<main class="page">
+    <h1 th:each="n : ${dsNhom}" th:if="${n['MaNhom'] == maNhom}" th:text="${n['TenNhom']}"></h1>
+    <div th:replace="~{fragments :: flash}"></div>
+    <p class="muted" th:if="${#lists.isEmpty(ds)}">Nhóm chưa có sản phẩm.</p>
+    <div class="products">
+        <div class="product" th:each="s : ${ds}">
+            <a th:href="@{/san-pham/{m}(m=${s['MaSP']})}"><img th:src="@{${s['Hinh']}}" alt=""></a>
+            <a class="name" th:href="@{/san-pham/{m}(m=${s['MaSP']})}" th:text="${s['TenSP']}"></a>
+            <small class="muted" th:text="${s['NhaSanXuat']} + ' · ' + ${s['MaSP']}"></small>
+            <b class="price" th:text="${#numbers.formatDecimal(s['GiaBan'],1,'COMMA',0,'POINT')} + ' đ'"></b>
+            <span class="badge" th:classappend="${s['TinhTrang'] == 'Còn hàng'} ? 'green' : 'red'" th:text="${s['TinhTrang']}"></span>
+            <div class="actions">
+                <form th:action="@{/gio-hang/them}" method="post" th:if="${s['TinhTrang'] == 'Còn hàng'}">
+                    <input type="hidden" name="maSP" th:value="${s['MaSP']}"><button class="btn small">Thêm vào giỏ</button></form>
+                <a class="btn ghost small" th:href="@{/san-pham/{m}(m=${s['MaSP']})}">Chi tiết</a>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Đăng ký')}"></head>
+<body>
+<header th:replace="~{fragments :: nav}"></header>
+<main class="page narrow">
+    <form class="card stack" th:action="@{/dang-ky}" method="post">
+        <h1>Đăng ký tài khoản khách hàng</h1>
+        <div th:replace="~{fragments :: flash}"></div>
+        <label>Họ tên <input name="hoTen" th:value="${f?.hoTen}" required></label>
+        <div class="row"><label>Ngày sinh <input type="date" name="ngaySinh" th:value="${f?.ngaySinh}" required></label>
+            <label>Số CMND / Passport <input name="soCMND" th:value="${f?.soCMND}" required></label></div>
+        <label>Địa chỉ <input name="diaChi" th:value="${f?.diaChi}" required></label>
+        <div class="row"><label>Điện thoại <input name="dienThoai" th:value="${f?.dienThoai}" required></label>
+            <label>Email (để nhận xác nhận đơn hàng) <input type="email" name="email" th:value="${f?.email}"></label></div>
+        <div class="row"><label>Tên đăng nhập <input name="tenDangNhap" th:value="${f?.tenDangNhap}" required></label>
+            <label>Mật khẩu (≥ 6 ký tự) <input type="password" name="matKhau" minlength="6" required></label></div>
+        <button class="btn">Đăng ký</button>
+        <p>Đã có tài khoản? <a th:href="@{/login}">Đăng nhập</a></p>
+    </form>
+</main>
+</body>
+</html>

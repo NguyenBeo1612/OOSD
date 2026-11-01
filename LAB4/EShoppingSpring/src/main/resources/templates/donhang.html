@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Đơn của tôi')}"></head>
+<body>
+<header th:replace="~{fragments :: nav}"></header>
+<main class="page">
+    <h1>Đơn hàng của tôi</h1>
+    <div class="card">
+        <p class="muted" th:if="${#lists.isEmpty(ds)}">Bạn chưa có đơn hàng nào.</p>
+        <table th:unless="${#lists.isEmpty(ds)}"><thead><tr><th>Mã đơn</th><th>Ngày đặt</th><th>Loại phiếu</th><th>Người nhận</th><th>Tổng</th><th>Trạng thái</th></tr></thead><tbody>
+        <tr th:each="d : ${ds}"><td><a th:href="@{/don-hang/{s}(s=${d['SoDon']})}" th:text="${d['SoDon']}"></a></td>
+            <td th:text="${#dates.format(d['NgayDat'],'dd/MM/yyyy HH:mm')}"></td><td th:text="${d['TenLoai']}"></td><td th:text="${d['TenNguoiNhan']}"></td>
+            <td th:text="${#numbers.formatDecimal(d['TongThanhToan'],1,'COMMA',0,'POINT')}"></td>
+            <td><span class="badge" th:classappend="${d['TrangThai'] == 'Hủy'} ? 'red' : 'green'" th:text="${d['TrangThai']}"></span></td></tr>
+        </tbody></table>
+    </div>
+</main>
+</body>
+</html>

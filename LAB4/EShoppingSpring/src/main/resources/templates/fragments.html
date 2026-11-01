@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${title} + ' – e-Shopping'">e-Shopping</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<header th:fragment="nav" class="topbar">
+    <a class="brand" th:href="@{/}">🎁 e-Shopping</a>
+    <nav>
+        <a th:each="n : ${dsNhom}" th:href="@{/nhom/{m}(m=${n['MaNhom']})}" th:text="${n['TenNhom']}"></a>
+    </nav>
+    <div class="user">
+        <a class="cart" th:href="@{/gio-hang}">🛒 Giỏ hàng <b class="pill" th:text="${soLuongGio ?: 0}">0</b></a>
+        <a sec:authorize="hasRole('KHACH')" th:href="@{/don-hang}">Đơn của tôi</a>
+        <a sec:authorize="hasRole('NHANVIEN')" th:href="@{/quan-tri/don-hang}">Quản lý đơn</a>
+        <span sec:authorize="isAuthenticated()" sec:authentication="name">user</span>
+        <form sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post"><button class="btn ghost small">Đăng xuất</button></form>
+        <a sec:authorize="!isAuthenticated()" th:href="@{/login}">Đăng nhập</a>
+        <a sec:authorize="!isAuthenticated()" class="btn ghost small" th:href="@{/dang-ky}">Đăng ký</a>
+    </div>
+</header>
+<div th:fragment="flash">
+    <div class="alert ok" th:if="${ok}" th:text="${ok}"></div>
+    <div class="alert err" th:if="${loi}" th:text="${loi}"></div>
+</div>
+</body>
+</html>

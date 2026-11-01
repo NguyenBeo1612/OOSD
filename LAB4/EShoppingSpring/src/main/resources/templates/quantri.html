@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Quản lý đơn hàng')}"></head>
+<body>
+<header th:replace="~{fragments :: nav}"></header>
+<main class="page">
+    <h1>Quản lý đơn đặt hàng</h1>
+    <form class="card row end" th:action="@{/quan-tri/don-hang}" method="get">
+        <label>Trạng thái <select name="trangThai" onchange="this.form.submit()"><option value="">-- tất cả --</option>
+            <option th:each="t : ${tatCa}" th:value="${t}" th:text="${t}" th:selected="${t == trangThai}"></option></select></label>
+    </form>
+    <div class="card">
+        <table><thead><tr><th>Mã đơn</th><th>Ngày đặt</th><th>Khách</th><th>Người nhận</th><th>Loại phiếu</th><th>Tổng</th><th>Trạng thái</th></tr></thead><tbody>
+        <tr th:each="d : ${ds}"><td><a th:href="@{/quan-tri/don-hang/{s}(s=${d['SoDon']})}" th:text="${d['SoDon']}"></a></td>
+            <td th:text="${#dates.format(d['NgayDat'],'dd/MM/yyyy HH:mm')}"></td><td th:text="${d['NguoiMua']}"></td>
+            <td th:text="${d['TenNguoiNhan'] + ' – ' + d['TenTinh']}"></td><td th:text="${d['TenLoai']}"></td>
+            <td th:text="${#numbers.formatDecimal(d['TongThanhToan'],1,'COMMA',0,'POINT')}"></td>
+            <td><span class="badge" th:classappend="${d['TrangThai'] == 'Hủy'} ? 'red' : 'green'" th:text="${d['TrangThai']}"></span></td></tr>
+        </tbody></table>
+    </div>
+</main>
+</body>
+</html>

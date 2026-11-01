@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Trang chủ')}"></head>
+<body>
+<header th:replace="~{fragments :: nav}"></header>
+<main class="page">
+    <section class="hero">
+        <h1>Mùa Giáng Sinh – mua quà online thật dễ</h1>
+        <p>Miễn phí chuyển phát nhanh cho đơn từ <b>1.000.000 đ</b>, miễn phí giao trong ngày cho đơn từ <b>5.000.000 đ</b>.</p>
+    </section>
+    <div th:replace="~{fragments :: flash}"></div>
+    <h2>Nhóm sản phẩm</h2>
+    <div class="tiles">
+        <a class="tile" th:each="n : ${dsNhom}" th:href="@{/nhom/{m}(m=${n['MaNhom']})}">
+            <span th:text="${n['MaNhom'] == 'MAYANH'} ? '📷' : (${n['MaNhom'] == 'DOCHOI'} ? '🧸' : (${n['MaNhom'] == 'GIADUNG'} ? '🍳' : '💻'))"></span>
+            <b th:text="${n['TenNhom']}"></b><small class="muted" th:text="${n['SoSanPham']} + ' sản phẩm'"></small>
+        </a>
+    </div>
+</main>
+</body>
+</html>

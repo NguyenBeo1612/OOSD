@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head(${sp['TenSP']})}"></head>
+<body>
+<header th:replace="~{fragments :: nav}"></header>
+<main class="page">
+    <p><a th:href="@{/nhom/{m}(m=${sp['MaNhom']})}" th:text="'← ' + ${sp['TenNhom']}"></a></p>
+    <div th:replace="~{fragments :: flash}"></div>
+    <div class="detail card">
+        <div class="gallery"><img th:each="h : ${hinh}" th:src="@{${h}}" alt=""></div>
+        <div class="stack">
+            <h1 th:text="${sp['TenSP']}"></h1>
+            <p class="muted">Mã <b th:text="${sp['MaSP']}"></b> · Nhà sản xuất <b th:text="${sp['NhaSanXuat']}"></b></p>
+            <b class="price big" th:text="${#numbers.formatDecimal(sp['GiaBan'],1,'COMMA',0,'POINT')} + ' đ'"></b>
+            <span class="badge" th:classappend="${conHang} ? 'green' : 'red'" th:text="${sp['TinhTrang']}"></span>
+            <p th:text="${sp['MoTa']}"></p>
+            <h2>Thông số kỹ thuật</h2>
+            <ul><li th:each="t : ${#strings.arraySplit(sp['ThongSoKyThuat'], ';')}" th:text="${#strings.trim(t)}"></li></ul>
+            <form class="row end" th:action="@{/gio-hang/them}" method="post" th:if="${conHang}">
+                <input type="hidden" name="maSP" th:value="${sp['MaSP']}">
+                <label style="max-width:120px">Số lượng <input type="number" name="soLuong" value="1" min="1"></label>
+                <button class="btn">Thêm vào giỏ hàng</button>
+            </form>
+        </div>
+    </div>
+</main>
+</body>
+</html>

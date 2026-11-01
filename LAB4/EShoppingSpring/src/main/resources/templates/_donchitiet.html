@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="don">
+    <div class="grid2">
+        <section class="card stack">
+            <h2>Thông tin đơn</h2>
+            <p>Ngày đặt <b th:text="${#dates.format(d['NgayDat'],'dd/MM/yyyy HH:mm')}"></b> · <span th:text="${d['TenLoai']}"></span> ·
+                dự kiến giao <b th:text="${#dates.format(d['DuKienGiao'],'dd/MM/yyyy')}"></b></p>
+            <p>Người mua: <b th:text="${d['NguoiMua']}"></b></p>
+            <p>Người nhận: <b th:text="${d['TenNguoiNhan']}"></b> – <span th:text="${d['DienThoaiNhan']}"></span><br>
+                <span th:text="${d['DiaChiNhan']} + ', ' + ${d['TenTinh']}"></span></p>
+            <p>Thanh toán: <span th:text="${d['TenLoaiThe']}"></span> <code th:text="${d['SoTheAn']}"></code> · mã giao dịch <code th:text="${d['MaGiaoDich']}"></code></p>
+        </section>
+        <section class="card">
+            <table><thead><tr><th>Sản phẩm</th><th>SL</th><th>Đơn giá</th><th>Thành tiền</th></tr></thead><tbody>
+            <tr th:each="c : ${ct}"><td th:text="${c['TenSP']}"></td><td th:text="${c['SoLuong']}"></td>
+                <td th:text="${#numbers.formatDecimal(c['DonGia'],1,'COMMA',0,'POINT')}"></td><td th:text="${#numbers.formatDecimal(c['ThanhTien'],1,'COMMA',0,'POINT')}"></td></tr>
+            </tbody></table>
+            <div class="sum">
+                <div><span>Tiền hàng</span><b th:text="${#numbers.formatDecimal(d['TongTienHang'],1,'COMMA',0,'POINT')}"></b></div>
+                <div><span>Phí giao hàng</span><b th:text="${#numbers.formatDecimal(d['PhiGiaoHang'],1,'COMMA',0,'POINT')}"></b></div>
+                <div><span>Phí thanh toán thẻ</span><b th:text="${#numbers.formatDecimal(d['PhiThe'],1,'COMMA',0,'POINT')}"></b></div>
+                <div class="grand"><span>Tổng thanh toán</span><b th:text="${#numbers.formatDecimal(d['TongThanhToan'],1,'COMMA',0,'POINT')} + ' đ'"></b></div>
+            </div>
+        </section>
+    </div>
+    <section class="card" th:unless="${#lists.isEmpty(thu)}">
+        <h2>Email xác nhận đã gửi</h2>
+        <div th:each="t : ${thu}"><p class="muted">Tới <b th:text="${t['DenEmail']}"></b> lúc <span th:text="${#dates.format(t['ThoiDiemGui'],'dd/MM/yyyy HH:mm')}"></span> – <b th:text="${t['TieuDe']}"></b></p>
+            <pre class="mail" th:text="${t['NoiDung']}"></pre></div>
+    </section>
+</div>
+</body>
+</html>

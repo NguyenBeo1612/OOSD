@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Chi tiết đơn')}"></head>
+<body>
+<header th:replace="~{fragments :: nav}"></header>
+<main class="page">
+    <p><a th:href="@{/don-hang}">← Đơn hàng của tôi</a></p>
+    <h1>Đơn <span th:text="${d['SoDon']}"></span> <span class="badge green" th:text="${d['TrangThai']}"></span></h1>
+    <div th:replace="~{fragments :: flash}"></div>
+    <div th:replace="~{_donchitiet :: don}"></div>
+</main>
+</body>
+</html>

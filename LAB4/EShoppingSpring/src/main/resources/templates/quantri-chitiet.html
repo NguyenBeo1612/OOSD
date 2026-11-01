@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Chi tiết đơn')}"></head>
+<body>
+<header th:replace="~{fragments :: nav}"></header>
+<main class="page">
+    <p><a th:href="@{/quan-tri/don-hang}">← Danh sách đơn</a></p>
+    <h1>Đơn <span th:text="${d['SoDon']}"></span> <span class="badge green" th:text="${d['TrangThai']}"></span></h1>
+    <div th:replace="~{fragments :: flash}"></div>
+    <form class="card row end" th:action="@{/quan-tri/don-hang/{s}(s=${d['SoDon']})}" method="post"
+          th:unless="${#sets.isEmpty(chuyen.get(d['TrangThai']))}">
+        <label>Chuyển trạng thái <select name="moi"><option th:each="t : ${chuyen.get(d['TrangThai'])}" th:value="${t}" th:text="${t}"></option></select></label>
+        <button class="btn">Cập nhật</button>
+    </form>
+    <div th:replace="~{_donchitiet :: don}"></div>
+</main>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Tính tiền')}"></head>
+<body>
+<header th:replace="~{fragments :: nav}"></header>
+<main class="page">
+    <h1>Đặt hàng – tính tiền</h1>
+    <div th:replace="~{fragments :: flash}"></div>
+    <form th:action="@{/dat-hang}" method="post" id="f">
+    <div class="grid-co">
+        <div class="stack">
+            <section class="card stack">
+                <h2>1. Loại phiếu đặt hàng</h2>
+                <label class="radio" th:each="l : ${loaiGiao}">
+                    <input type="radio" name="maLoai" th:value="${l['MaLoai']}" th:checked="${l['MaLoai'] == maLoai}" onchange="xemTruoc()">
+                    <span><b th:text="${l['TenLoai']}"></b>
+                        <small class="muted" th:text="${l['SoNgayXuLy'] == 0} ? ' – giao trong ngày' : (' – xử lý ' + ${l['SoNgayXuLy']} + ' ngày')"></small>
+                        <small class="muted" th:text="' · miễn phí từ ' + ${#numbers.formatDecimal(l['NguongMienPhi'],1,'COMMA',0,'POINT')} + ' đ'"></small></span>
+                </label>
+            </section>
+            <section class="card stack">
+                <h2>2. Người nhận hàng</h2>
+                <p class="hint">Người nhận có thể khác người mua (ví dụ mua quà tặng).</p>
+                <div class="row"><label>Họ tên <input name="tenNguoiNhan" th:value="${kh['HoTen']}" required></label>
+                    <label>Điện thoại <input name="dienThoaiNhan" th:value="${kh['DienThoai']}" required></label></div>
+                <label>Địa chỉ <input name="diaChiNhan" th:value="${kh['DiaChi']}" required></label>
+                <label>Tỉnh / thành (khu vực giao)
+                    <select name="maTinh" onchange="xemTruoc()"><option th:each="t : ${tinh}" th:value="${t['MaTinh']}"
+                        th:text="${t['TenTinh'] + ' – ' + t['TenKV']}" th:selected="${t['MaTinh'] == maTinh}"></option></select></label>
+            </section>
+            <section class="card stack">
+                <h2>3. Thanh toán bằng thẻ tín dụng</h2>
+                <div class="row">
+                    <label>Loại thẻ <select name="loaiThe" onchange="xemTruoc()"><option th:each="t : ${loaiThes}" th:value="${t['MaLoaiThe']}"
+                        th:text="${t['TenLoaiThe'] + ' (' + t['SoChuSo'] + ' số, CSV ' + t['SoChuSoCSV'] + ' số)'}" th:selected="${t['MaLoaiThe'] == loaiThe}"></option></select></label>
+                    <label>Số thẻ <input name="soThe" inputmode="numeric" autocomplete="cc-number" required></label>
+                </div>
+                <div class="row">
+                    <label>Hết hạn <input type="month" name="hetHan" th:min="${thangNay}" required></label>
+                    <label>Họ tên chủ thẻ <input name="chuThe" autocomplete="cc-name" required></label>
+                    <label>CSV <input name="csv" inputmode="numeric" maxlength="4" autocomplete="cc-csc" required style="max-width:90px"></label>
+                </div>
+                <p class="hint">Thông tin thẻ được kiểm tra với hệ thống thanh toán trực tuyến; e-Shopping chỉ lưu 4 số cuối, không lưu mã CSV.</p>
+            </section>
+        </div>
+        <aside class="card stack sticky">
+            <h2>Đơn hàng của bạn</h2>
+            <table><tbody><tr th:each="m : ${gio.danhSach}"><td th:text="${m.tenSP} + ' × ' + ${m.soLuong}"></td>
+                <td class="r" th:text="${#numbers.formatDecimal(m.thanhTien,1,'COMMA',0,'POINT')}"></td></tr></tbody></table>
+            <div th:if="${tien != null}" class="sum">
+                <div><span>Tiền hàng</span><b th:text="${#numbers.formatDecimal(tien['TienHang'],1,'COMMA',0,'POINT')} + ' đ'"></b></div>
+                <div><span>Phí giao hàng</span><b th:text="${tien['PhiGiao'].signum() == 0} ? 'Miễn phí' : ${#numbers.formatDecimal(tien['PhiGiao'],1,'COMMA',0,'POINT')} + ' đ'"></b></div>
+                <div><span>Phí thanh toán thẻ</span><b th:text="${#numbers.formatDecimal(tien['PhiThe'],1,'COMMA',0,'POINT')} + ' đ'"></b></div>
+                <div class="grand"><span>Tổng thanh toán</span><b th:text="${#numbers.formatDecimal(tien['Tong'],1,'COMMA',0,'POINT')} + ' đ'"></b></div>
+            </div>
+            <p class="muted">Người mua: <b th:text="${kh['HoTen']}"></b><span th:if="${kh['Email'] != null}" th:text="' · email xác nhận gửi tới ' + ${kh['Email']}"></span></p>
+            <button class="btn" type="submit">Đặt hàng</button>
+            <a th:href="@{/gio-hang}">← Sửa giỏ hàng</a>
+        </aside>
+    </div>
+    </form>
+</main>
+<script>
+    // Xem trước phí khi đổi loại phiếu / tỉnh / loại thẻ (tải lại trang với tham số, không gửi thông tin thẻ).
+    function xemTruoc() {
+        const f = document.getElementById('f');
+        const q = new URLSearchParams({maLoai: f.maLoai.value, maTinh: f.maTinh.value, loaiThe: f.loaiThe.value});
+        location.href = '?' + q.toString();
+    }
+</script>
+</body>
+</html>
