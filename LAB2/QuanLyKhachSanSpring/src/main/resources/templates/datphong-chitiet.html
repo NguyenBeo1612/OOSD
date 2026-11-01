@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Chi tiết phiếu đặt')}"></head>
+<body>
+<header th:replace="~{fragments :: nav}"></header>
+<main class="page">
+    <p><a th:href="@{/dat-phong}">← Danh sách phiếu đặt</a></p>
+    <h1>Phiếu <span th:text="${pd['SoPhieuDat']}"></span>
+        <span class="badge" th:classappend="${pd['TrangThai'] == 'Đang ở'} ? 'green' : ''" th:text="${pd['TrangThai']}"></span></h1>
+    <div th:replace="~{fragments :: flash}"></div>
+    <div class="card">
+        <p>Khách: <b th:text="${pd['HoTen']}"></b> (<span th:text="${pd['SoCMND']}"></span>, <span th:text="${pd['QuocTich']}"></span>) ·
+            Nhận <b th:text="${#dates.format(pd['NgayNhan'],'dd/MM/yyyy')}"></b> – trả dự kiến <b th:text="${#dates.format(pd['NgayTraDuKien'],'dd/MM/yyyy')}"></b> ·
+            Cọc <b th:text="${#numbers.formatDecimal(pd['TienCoc'],1,'COMMA',0,'POINT')}"></b> · Kênh <span th:text="${pd['KenhDat']}"></span> ·
+            Lễ tân <span th:text="${pd['TenLeTan']}"></span></p>
+        <div class="actions" th:if="${pd['TrangThai'] == 'Đã đặt'}">
+            <form th:action="@{/dat-phong/{so}/nhan-phong(so=${pd['SoPhieuDat']})}" method="post"><button class="btn">Nhận phòng</button></form>
+            <form th:action="@{/dat-phong/{so}/no-show(so=${pd['SoPhieuDat']})}" method="post" onsubmit="return confirm('Xác nhận khách không đến?')">
+                <button class="btn danger">Đánh dấu no-show</button></form>
+        </div>
+    </div>
+    <div class="grid2">
+        <section class="card stack">
+            <h2>Ghi nhận người lưu trú (BR06)</h2>
+            <form class="stack" th:action="@{/dat-phong/{so}/nguoi-luu-tru(so=${pd['SoPhieuDat']})}" method="post">
+                <label>Phòng <select name="phong"><option th:each="c : ${ct}" th:value="${c['SoPhong']}"
+                        th:text="${c['SoPhong'] + ' (đã ghi ' + c['DaGhi'] + '/' + c['SoNguoi'] + ')'}"></option></select></label>
+                <label>Họ tên <input name="ten" required></label>
+                <div class="row"><label>CCCD / hộ chiếu <input name="cmnd" required></label><label>Quốc tịch <input name="qt" value="Việt Nam" required></label></div>
+                <button class="btn">Thêm người lưu trú</button>
+            </form>
+        </section>
+        <section class="card">
+            <h2>Phòng trong phiếu</h2>
+            <table><thead><tr><th>Phòng</th><th>Số người đăng ký</th><th>Đã ghi</th><th>Sức chứa</th></tr></thead><tbody>
+            <tr th:each="c : ${ct}"><td th:text="${c['SoPhong']}"></td><td th:text="${c['SoNguoi']}"></td><td th:text="${c['DaGhi']}"></td>
+                <td th:text="${c['SoNguoiToiDa']}"></td></tr></tbody></table>
+            <h2 style="margin-top:14px">Người lưu trú</h2>
+            <table><thead><tr><th>#</th><th>Phòng</th><th>Họ tên</th><th>CCCD</th><th>Quốc tịch</th></tr></thead><tbody>
+            <tr th:each="n : ${nguoi}"><td th:text="${n['MaNguoiLT']}"></td><td th:text="${n['SoPhong']}"></td><td th:text="${n['HoTen']}"></td>
+                <td th:text="${n['SoCMND']}"></td><td th:text="${n['QuocTich']}"></td></tr></tbody></table>
+        </section>
+    </div>
+</main>
+</body>
+</html>
