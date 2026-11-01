@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Dịch vụ')}"></head>
+<body>
+<header th:replace="~{fragments :: nav}"></header>
+<main class="page">
+    <h1>Ghi nhận sử dụng dịch vụ</h1>
+    <div th:replace="~{fragments :: flash}"></div>
+    <form class="card row end" th:action="@{/dich-vu}" method="get">
+        <label>Phiếu đang ở
+            <select name="soDat" onchange="this.form.submit()">
+                <option value="">-- chọn phiếu --</option>
+                <option th:each="p : ${phieu}" th:value="${p['SoPhieuDat']}" th:text="${p['SoPhieuDat'] + ' – ' + p['HoTen']}"
+                        th:selected="${p['SoPhieuDat'] == soDat}"></option>
+            </select>
+        </label>
+    </form>
+    <div class="grid2" th:if="${soDat != null and soDat != ''}">
+        <form class="card stack" th:action="@{/dich-vu}" method="post">
+            <input type="hidden" name="soDat" th:value="${soDat}">
+            <h2>Ghi nhận (BR07 – cộng dồn trong ngày)</h2>
+            <label>Phòng <select name="phong"><option th:each="r : ${phong}" th:value="${r['SoPhong']}" th:text="${r['SoPhong']}"></option></select></label>
+            <label>Dịch vụ <select name="maDV"><option th:each="d : ${dichVu}" th:value="${d['MaDV']}"
+                    th:text="${d['TenDV'] + ' – ' + #numbers.formatDecimal(d['DonGia'],1,'COMMA',0,'POINT') + '/' + d['DonViTinh']}"></option></select></label>
+            <div class="row"><label>Ngày sử dụng <input type="date" name="ngay" th:value="${homNay}"></label>
+                <label>Số lượng <input type="number" name="soLuong" min="1" value="1"></label></div>
+            <button class="btn">Ghi nhận</button>
+        </form>
+        <section class="card">
+            <h2>Lịch sử dịch vụ của phiếu</h2>
+            <table><thead><tr><th>Phiếu DV</th><th>Phòng</th><th>Ngày</th><th>Dịch vụ</th><th>SL</th><th>Đơn giá</th><th>Thành tiền</th></tr></thead><tbody>
+            <tr th:each="r : ${lichSu}"><td th:text="${r['SoPhieuSDDV']}"></td><td th:text="${r['SoPhong']}"></td>
+                <td th:text="${#dates.format(r['NgaySuDung'],'dd/MM/yyyy')}"></td><td th:text="${r['TenDV']}"></td><td th:text="${r['SoLuong']}"></td>
+                <td th:text="${#numbers.formatDecimal(r['DonGia'],1,'COMMA',0,'POINT')}"></td>
+                <td th:text="${#numbers.formatDecimal(r['ThanhTien'],1,'COMMA',0,'POINT')}"></td></tr></tbody></table>
+        </section>
+    </div>
+</main>
+</body>
+</html>

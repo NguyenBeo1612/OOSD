@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Đặt phòng')}"></head>
+<body>
+<header th:replace="~{fragments :: nav}"></header>
+<main class="page">
+    <h1>Khách hàng và đặt phòng</h1>
+    <div th:replace="~{fragments :: flash}"></div>
+    <div class="grid2">
+        <section class="card stack">
+            <h2>Thêm khách hàng</h2>
+            <form class="stack" th:action="@{/dat-phong/khach}" method="post">
+                <div class="row"><label>Mã khách <input name="ma" required maxlength="20"></label><label>Họ tên <input name="ten" required></label></div>
+                <div class="row"><label>CCCD / hộ chiếu <input name="cmnd" required></label><label>Quốc tịch <input name="qt" value="Việt Nam" required></label></div>
+                <label>Điện thoại <input name="sdt"></label>
+                <button class="btn">Lưu khách hàng</button>
+            </form>
+        </section>
+        <section class="card stack">
+            <h2>Lập phiếu đặt phòng (BR05)</h2>
+            <form class="stack" th:action="@{/dat-phong}" method="post">
+                <div class="row">
+                    <label>Khách hàng <select name="maKhach"><option th:each="k : ${khach}" th:value="${k['MaKhach']}" th:text="${k['HoTen'] + ' – ' + k['SoCMND']}"></option></select></label>
+                    <label>Kênh đặt <select name="kenh"><option th:each="k : ${kenhs}" th:value="${k}" th:text="${k}"></option></select></label>
+                </div>
+                <div class="row">
+                    <label>Ngày nhận <input type="date" name="nhan" th:value="${homNay}"></label>
+                    <label>Ngày trả dự kiến <input type="date" name="tra" th:value="${ngayMai}"></label>
+                    <label>Tiền cọc <input type="number" name="coc" min="0" step="10000" value="0"></label>
+                </div>
+                <table><thead><tr><th>Phòng</th><th>Khu</th><th>Sức chứa</th><th>Đơn giá</th><th>Trạng thái</th><th>Số người</th></tr></thead><tbody>
+                <tr th:each="p : ${phong}">
+                    <td th:text="${p['SoPhong']}"></td><td th:text="${p['TenKhuVuc']}"></td><td th:text="${p['SoNguoiToiDa']}"></td>
+                    <td th:text="${#numbers.formatDecimal(p['DonGiaNgay'],1,'COMMA',0,'POINT')}"></td>
+                    <td><span class="badge" th:classappend="${p['TrangThai'] == 'Trống'} ? 'green' : 'red'" th:text="${p['TrangThai']}"></span></td>
+                    <td><input type="number" th:name="${'sn_' + p['SoPhong']}" min="0" style="width:80px" placeholder="0"></td>
+                </tr></tbody></table>
+                <p class="hint">Nhập số người cho phòng muốn đặt. Hệ thống kiểm tra sức chứa và lịch chồng lấn (không chỉ dựa vào trạng thái).</p>
+                <button class="btn">Lập phiếu đặt</button>
+            </form>
+        </section>
+    </div>
+    <section class="card">
+        <h2>Danh sách phiếu đặt phòng</h2>
+        <table><thead><tr><th>Số phiếu</th><th>Khách</th><th>Ngày nhận</th><th>Trả dự kiến</th><th>Cọc</th><th>Kênh</th><th>Trạng thái</th><th></th></tr></thead><tbody>
+        <tr th:each="d : ${phieu}">
+            <td th:text="${d['SoPhieuDat']}"></td><td th:text="${d['HoTen']}"></td>
+            <td th:text="${#dates.format(d['NgayNhan'],'dd/MM/yyyy')}"></td><td th:text="${#dates.format(d['NgayTraDuKien'],'dd/MM/yyyy')}"></td>
+            <td th:text="${#numbers.formatDecimal(d['TienCoc'],1,'COMMA',0,'POINT')}"></td><td th:text="${d['KenhDat']}"></td>
+            <td><span class="badge" th:classappend="${d['TrangThai'] == 'Đang ở'} ? 'green' : (${d['TrangThai'] == 'No-show'} ? 'red' : '')" th:text="${d['TrangThai']}"></span></td>
+            <td><a class="btn ghost small" th:href="@{/dat-phong/{so}(so=${d['SoPhieuDat']})}">Chi tiết / nhận phòng</a></td>
+        </tr></tbody></table>
+    </section>
+</main>
+</body>
+</html>
