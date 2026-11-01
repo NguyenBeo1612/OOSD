@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Đầu sách')}"></head>
+<body>
+<header th:replace="~{fragments :: nav}"></header>
+<main class="page">
+    <h1>Quản lý đầu sách</h1>
+    <div th:replace="~{fragments :: flash}"></div>
+    <div class="grid2">
+        <form class="card stack" th:action="@{/sach/luu}" th:object="${s}" method="post">
+            <h2 th:text="${capNhat} ? 'Cập nhật đầu sách' : 'Thêm đầu sách'">Thêm</h2>
+            <input type="hidden" name="capNhat" th:value="${capNhat}">
+            <label>Mã đầu sách * <input th:field="*{maDauSach}" th:readonly="${capNhat}" maxlength="20"></label>
+            <label>Tên sách * <input th:field="*{tenSach}" maxlength="200"></label>
+            <div class="row">
+                <label>Năm xuất bản * <input type="number" th:field="*{namXuatBan}" min="1900"></label>
+                <label>Số lượng hiện có * <input type="number" th:field="*{soLuongHienCo}" min="0"></label>
+            </div>
+            <div class="row">
+                <label>Thể loại *
+                    <select name="maTheLoai">
+                        <option value="">-- chọn --</option>
+                        <option th:each="t : ${theLoais}" th:value="${t.maTheLoai}" th:text="${t.tenTheLoai}"
+                                th:selected="${t.maTheLoai == maTheLoai}"></option>
+                    </select>
+                </label>
+                <label>Nhà xuất bản *
+                    <select name="maNhaXuatBan">
+                        <option value="">-- chọn --</option>
+                        <option th:each="n : ${nxbs}" th:value="${n.maNhaXuatBan}" th:text="${n.maNhaXuatBan}"
+                                th:selected="${n.maNhaXuatBan == maNhaXuatBan}"></option>
+                    </select>
+                </label>
+            </div>
+            <div class="actions">
+                <button class="btn" type="submit" th:text="${capNhat} ? 'Cập nhật' : 'Thêm'">Lưu</button>
+                <a class="btn ghost" th:href="@{/sach}">Làm mới</a>
+            </div>
+        </form>
+        <div class="card">
+            <form class="search" th:action="@{/sach}" method="get">
+                <input name="tuKhoa" th:value="${tuKhoa}" placeholder="Tìm theo mã hoặc tên sách...">
+                <button class="btn small" type="submit">Tìm</button>
+            </form>
+            <table>
+                <thead><tr><th>Mã</th><th>Tên sách</th><th>Năm XB</th><th>SL</th><th>Thể loại</th><th>NXB</th><th></th></tr></thead>
+                <tbody>
+                <tr th:each="x : ${ds}">
+                    <td><a th:href="@{/sach(ma=${x.maDauSach})}" th:text="${x.maDauSach}"></a></td>
+                    <td th:text="${x.tenSach}"></td>
+                    <td th:text="${x.namXuatBan}"></td>
+                    <td th:text="${x.soLuongHienCo}" th:classappend="${x.soLuongHienCo == 0} ? 'red'"></td>
+                    <td th:text="${x.theLoai.tenTheLoai}"></td>
+                    <td th:text="${x.nhaXuatBan.maNhaXuatBan}"></td>
+                    <td><form th:action="@{/sach/xoa}" method="post" onsubmit="return confirm('Xóa đầu sách này?')">
+                        <input type="hidden" name="ma" th:value="${x.maDauSach}"><button class="btn danger small">Xóa</button></form></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+</body>
+</html>

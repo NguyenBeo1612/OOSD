@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Độc giả và thẻ')}"></head>
+<body>
+<header th:replace="~{fragments :: nav}"></header>
+<main class="page">
+    <h1>Độc giả và thẻ thư viện</h1>
+    <div th:replace="~{fragments :: flash}"></div>
+    <div class="grid2">
+        <div class="stack">
+            <form class="card stack" th:action="@{/doc-gia/luu}" th:object="${dg}" method="post">
+                <h2 th:text="${capNhat} ? 'Cập nhật độc giả' : 'Thêm độc giả'">Thêm</h2>
+                <input type="hidden" name="capNhat" th:value="${capNhat}">
+                <label>Mã độc giả * <input th:field="*{maDocGia}" th:readonly="${capNhat}" maxlength="20"></label>
+                <div class="row">
+                    <label>Họ * <input th:field="*{ho}"></label>
+                    <label>Tên * <input th:field="*{ten}"></label>
+                </div>
+                <div class="row">
+                    <label>Ngày sinh * <input type="date" th:field="*{ngaySinh}"></label>
+                    <label>Phái * <select th:field="*{phai}"><option value="">--</option><option>Nam</option><option>Nữ</option></select></label>
+                </div>
+                <div class="row">
+                    <label>Số điện thoại <input th:field="*{soDienThoai}"></label>
+                    <label>Email * <input type="email" th:field="*{email}"></label>
+                </div>
+                <label>Địa chỉ * <input th:field="*{diaChi}"></label>
+                <label>Ảnh 3x4 (đường dẫn) <input th:field="*{anh3x4}"></label>
+                <div class="actions">
+                    <button class="btn" type="submit" th:text="${capNhat} ? 'Cập nhật' : 'Thêm'">Lưu</button>
+                    <a class="btn ghost" th:href="@{/doc-gia}">Làm mới</a>
+                </div>
+            </form>
+
+            <div class="card stack" th:if="${maChon != null}">
+                <h2>Thẻ thư viện của <span th:text="${maChon}"></span></h2>
+                <p th:if="${theChon == null}" class="muted">Độc giả chưa có thẻ đang hoạt động.</p>
+                <p th:if="${theChon != null}">
+                    Thẻ <b th:text="${theChon.maThe}"></b>: cấp
+                    <span th:text="${#temporals.format(theChon.ngayCap,'dd/MM/yyyy')}"></span>, hạn
+                    <b th:text="${#temporals.format(theChon.hanSuDung,'dd/MM/yyyy')}"></b>,
+                    lệ phí: <span th:text="${theChon.daDongLePhi} ? 'đã đóng' : 'chưa đóng'"></span>
+                    <span class="badge" th:classappend="${theChon.conGiaTri(homNay)} ? 'green' : 'red'"
+                          th:text="${theChon.conGiaTri(homNay)} ? 'Có giá trị' : 'Không có giá trị'"></span>
+                </p>
+                <form th:action="@{/doc-gia/cap-the}" method="post" class="row end">
+                    <input type="hidden" name="ma" th:value="${maChon}">
+                    <label>Ngày cấp <input type="date" name="ngayCap" th:value="${homNay}"></label>
+                    <label>Hạn sử dụng <input type="date" name="hanSuDung" th:value="${hanMacDinh}"></label>
+                    <label class="check"><input type="checkbox" name="daDongLePhi" value="true" checked> Đã đóng lệ phí</label>
+                    <button class="btn" type="submit">Cấp thẻ</button>
+                </form>
+                <form th:action="@{/doc-gia/gia-han}" method="post" class="row end" th:if="${theChon != null}">
+                    <input type="hidden" name="ma" th:value="${maChon}">
+                    <label>Hạn mới <input type="date" name="hanMoi" th:value="${theChon.hanSuDung.plusYears(1)}"></label>
+                    <label class="check"><input type="checkbox" name="daDongLePhi" value="true" checked> Đã đóng lệ phí</label>
+                    <button class="btn ghost" type="submit">Gia hạn</button>
+                </form>
+            </div>
+        </div>
+        <div class="card">
+            <table>
+                <thead><tr><th>Mã</th><th>Họ tên</th><th>Ngày sinh</th><th>Email</th><th>Thẻ</th><th>Hạn</th><th></th></tr></thead>
+                <tbody>
+                <tr th:each="x : ${ds}" th:classappend="${x.maDocGia == maChon} ? 'selected'">
+                    <td><a th:href="@{/doc-gia(ma=${x.maDocGia})}" th:text="${x.maDocGia}"></a></td>
+                    <td th:text="${x.hoTen}"></td>
+                    <td th:text="${#temporals.format(x.ngaySinh,'dd/MM/yyyy')}"></td>
+                    <td th:text="${x.email}"></td>
+                    <td th:with="t=${theMap.get(x.maDocGia)}">
+                        <span th:if="${t == null}" class="badge">Chưa có</span>
+                        <span th:if="${t != null}" class="badge" th:classappend="${t.conGiaTri(homNay)} ? 'green' : 'red'"
+                              th:text="${t.conGiaTri(homNay)} ? 'Có giá trị' : 'Hết giá trị'"></span>
+                    </td>
+                    <td th:with="t=${theMap.get(x.maDocGia)}"
+                        th:text="${t == null} ? '' : ${#temporals.format(t.hanSuDung,'dd/MM/yyyy')}"></td>
+                    <td><form th:action="@{/doc-gia/xoa}" method="post" onsubmit="return confirm('Xóa độc giả này?')">
+                        <input type="hidden" name="ma" th:value="${x.maDocGia}"><button class="btn danger small">Xóa</button></form></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+</body>
+</html>

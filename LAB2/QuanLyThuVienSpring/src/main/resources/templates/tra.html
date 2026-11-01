@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Trả sách')}"></head>
+<body>
+<header th:replace="~{fragments :: nav}"></header>
+<main class="page">
+    <h1>Nhận trả sách và lập phiếu phạt</h1>
+    <div th:replace="~{fragments :: flash}"></div>
+
+    <form class="card row end" th:action="@{/tra}" method="get">
+        <label>Độc giả
+            <select name="maDG" onchange="this.form.submit()">
+                <option value="">-- chọn độc giả --</option>
+                <option th:each="d : ${docGias}" th:value="${d.maDocGia}" th:text="${d.maDocGia + ' – ' + d.hoTen}"
+                        th:selected="${d.maDocGia == maDG}"></option>
+            </select>
+        </label>
+        <span class="muted">Nhân viên nhận trả: <b th:text="${nhanVien.hoTen}"></b></span>
+    </form>
+
+    <form class="card stack" th:action="@{/tra}" method="post" th:if="${maDG != null and maDG != ''}">
+        <input type="hidden" name="maDG" th:value="${maDG}">
+        <h2>Sách chưa trả</h2>
+        <p class="muted" th:if="${#lists.isEmpty(dangMuon)}">Độc giả không có sách đang mượn.</p>
+        <table th:if="${!#lists.isEmpty(dangMuon)}">
+            <thead><tr><th></th><th>Mã CT</th><th>Phiếu</th><th>Sách</th><th>Ngày mượn</th><th>Hẹn trả</th><th>Trạng thái</th></tr></thead>
+            <tbody><tr th:each="c : ${dangMuon}">
+                <td><input type="radio" name="maChiTiet" th:value="${c.maChiTiet}"></td>
+                <td th:text="${c.maChiTiet}"></td>
+                <td th:text="${c.phieuMuon.maPhieuMuon}"></td>
+                <td th:text="${c.dauSach.tenSach}"></td>
+                <td th:text="${#temporals.format(c.phieuMuon.ngayMuon,'dd/MM/yyyy')}"></td>
+                <td th:text="${#temporals.format(c.phieuMuon.ngayHenTra,'dd/MM/yyyy')}"></td>
+                <td><span class="badge" th:classappend="${c.quaHan(homNay)} ? 'red' : 'green'"
+                          th:text="${c.quaHan(homNay)} ? 'Quá hạn' : 'Trong hạn'"></span></td>
+            </tr></tbody>
+        </table>
+        <div class="row end" th:if="${!#lists.isEmpty(dangMuon)}">
+            <label>Ngày trả <input type="date" name="ngayTra" th:value="${homNay}"></label>
+            <label>Tình trạng
+                <select name="tinhTrang"><option th:each="t : ${tinhTrangs}" th:value="${t}" th:text="${t}"></option></select>
+            </label>
+            <label>Phí phạt (VNĐ) <input type="number" name="phiPhat" min="0" step="1000" value="0"></label>
+            <button class="btn" type="submit">Xác nhận trả sách</button>
+        </div>
+        <p class="hint">Trả trễ hạn, mất hoặc rách/hư hỏng bắt buộc nhập phí phạt &gt; 0 (BR09, BR10).</p>
+    </form>
+</main>
+</body>
+</html>

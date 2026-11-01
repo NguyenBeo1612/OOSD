@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Thống kê')}"></head>
+<body>
+<header th:replace="~{fragments :: nav}"></header>
+<main class="page">
+    <h1>Thống kê hoạt động thư viện</h1>
+    <form class="card row end" th:action="@{/thong-ke}" method="get">
+        <label>Từ ngày <input type="date" name="tu" th:value="${tk.tuNgay}"></label>
+        <label>Đến ngày <input type="date" name="den" th:value="${tk.denNgay}"></label>
+        <button class="btn" type="submit">Thống kê</button>
+    </form>
+    <div class="kpis">
+        <div class="kpi"><span>Lượt sách mượn</span><b th:text="${tk.luotSachMuon}">0</b></div>
+        <div class="kpi"><span>Sách quá hạn</span><b th:text="${tk.sachQuaHan}">0</b></div>
+        <div class="kpi"><span>Sách mất</span><b th:text="${tk.sachMat}">0</b></div>
+        <div class="kpi"><span>Sách rách / hư hỏng</span><b th:text="${tk.sachHuHong}">0</b></div>
+        <div class="kpi"><span>Tổng phí phạt</span><b th:text="${#numbers.formatDecimal(tk.tongPhiPhat, 1, 'COMMA', 0, 'POINT')} + ' đ'">0</b></div>
+    </div>
+    <div class="card">
+        <h2>Chi tiết phiếu phạt</h2>
+        <p class="muted" th:if="${#lists.isEmpty(phat)}">Không có phiếu phạt trong khoảng thời gian này.</p>
+        <table th:if="${!#lists.isEmpty(phat)}">
+            <thead><tr><th>Mã phiếu phạt</th><th>Ngày phạt</th><th>Độc giả</th><th>Sách</th><th>Lý do</th><th>Phí phạt</th><th>Nhân viên</th></tr></thead>
+            <tbody><tr th:each="p : ${phat}">
+                <td th:text="${p.maPhieuPhat}"></td>
+                <td th:text="${#temporals.format(p.ngayPhat,'dd/MM/yyyy')}"></td>
+                <td th:text="${p.chiTiet.phieuMuon.docGia.hoTen}"></td>
+                <td th:text="${p.chiTiet.dauSach.tenSach}"></td>
+                <td th:text="${p.lyDo}"></td>
+                <td th:text="${#numbers.formatDecimal(p.phiPhat, 1, 'COMMA', 0, 'POINT')}"></td>
+                <td th:text="${p.nhanVien.hoTen}"></td>
+            </tr></tbody>
+        </table>
+    </div>
+</main>
+</body>
+</html>

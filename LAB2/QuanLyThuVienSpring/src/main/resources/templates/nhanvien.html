@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Nhân viên')}"></head>
+<body>
+<header th:replace="~{fragments :: nav}"></header>
+<main class="page">
+    <h1>Quản lý thông tin nhân viên</h1>
+    <div th:replace="~{fragments :: flash}"></div>
+    <div class="grid2">
+        <form class="card stack" th:action="@{/nhan-vien/luu}" th:object="${nv}" method="post">
+            <h2 th:text="${capNhat} ? 'Cập nhật nhân viên' : 'Thêm nhân viên'">Thêm</h2>
+            <input type="hidden" name="capNhat" th:value="${capNhat}">
+            <label>Mã nhân viên * <input th:field="*{maNhanVien}" th:readonly="${capNhat}" maxlength="20"></label>
+            <div class="row">
+                <label>Họ * <input th:field="*{ho}" maxlength="50"></label>
+                <label>Tên * <input th:field="*{ten}" maxlength="50"></label>
+            </div>
+            <div class="row">
+                <label>Phái *
+                    <select th:field="*{phai}"><option value="">--</option><option>Nam</option><option>Nữ</option></select>
+                </label>
+                <label>Ngày sinh * <input type="date" th:field="*{ngaySinh}"></label>
+            </div>
+            <label>Chức vụ * <input th:field="*{chucVu}" maxlength="80"></label>
+            <label>Số điện thoại <input th:field="*{soDienThoai}" maxlength="20"></label>
+            <div class="actions">
+                <button class="btn" type="submit" th:text="${capNhat} ? 'Cập nhật' : 'Thêm'">Lưu</button>
+                <a class="btn ghost" th:href="@{/nhan-vien}">Làm mới</a>
+            </div>
+        </form>
+        <div class="card">
+            <table>
+                <thead><tr><th>Mã</th><th>Họ tên</th><th>Phái</th><th>Ngày sinh</th><th>Chức vụ</th><th>SĐT</th><th></th></tr></thead>
+                <tbody>
+                <tr th:each="x : ${ds}">
+                    <td><a th:href="@{/nhan-vien(ma=${x.maNhanVien})}" th:text="${x.maNhanVien}"></a></td>
+                    <td th:text="${x.hoTen}"></td>
+                    <td th:text="${x.phai}"></td>
+                    <td th:text="${#temporals.format(x.ngaySinh, 'dd/MM/yyyy')}"></td>
+                    <td th:text="${x.chucVu}"></td>
+                    <td th:text="${x.soDienThoai}"></td>
+                    <td><form th:action="@{/nhan-vien/xoa}" method="post" onsubmit="return confirm('Xóa nhân viên này?')">
+                        <input type="hidden" name="ma" th:value="${x.maNhanVien}"><button class="btn danger small">Xóa</button></form></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+</body>
+</html>

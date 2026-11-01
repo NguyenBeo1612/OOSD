@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Nhà xuất bản')}"></head>
+<body>
+<header th:replace="~{fragments :: nav}"></header>
+<main class="page">
+    <h1>Quản lý nhà xuất bản</h1>
+    <div th:replace="~{fragments :: flash}"></div>
+    <div class="grid2">
+        <form class="card stack" th:action="@{/nha-xuat-ban/luu}" th:object="${nxb}" method="post">
+            <h2 th:text="${capNhat} ? 'Cập nhật NXB' : 'Thêm NXB'">Thêm</h2>
+            <input type="hidden" name="capNhat" th:value="${capNhat}">
+            <label>Mã NXB * <input th:field="*{maNhaXuatBan}" th:readonly="${capNhat}" maxlength="20"></label>
+            <label>Địa chỉ <input th:field="*{diaChi}" maxlength="250"></label>
+            <label>Số điện thoại <input th:field="*{soDienThoai}" maxlength="20"></label>
+            <div class="actions">
+                <button class="btn" type="submit" th:text="${capNhat} ? 'Cập nhật' : 'Thêm'">Lưu</button>
+                <a class="btn ghost" th:href="@{/nha-xuat-ban}">Làm mới</a>
+            </div>
+        </form>
+        <div class="card">
+            <table>
+                <thead><tr><th>Mã NXB</th><th>Địa chỉ</th><th>SĐT</th><th></th></tr></thead>
+                <tbody>
+                <tr th:each="x : ${ds}">
+                    <td><a th:href="@{/nha-xuat-ban(ma=${x.maNhaXuatBan})}" th:text="${x.maNhaXuatBan}"></a></td>
+                    <td th:text="${x.diaChi}"></td>
+                    <td th:text="${x.soDienThoai}"></td>
+                    <td><form th:action="@{/nha-xuat-ban/xoa}" method="post" onsubmit="return confirm('Xóa nhà xuất bản này?')">
+                        <input type="hidden" name="ma" th:value="${x.maNhaXuatBan}"><button class="btn danger small">Xóa</button></form></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+</body>
+</html>

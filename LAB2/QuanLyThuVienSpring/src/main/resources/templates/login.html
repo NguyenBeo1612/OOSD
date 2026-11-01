@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Đăng nhập')}"></head>
+<body class="login-page">
+<main class="login-card">
+    <h1>📚 Hệ thống quản lý thư viện</h1>
+    <p class="muted">Đăng nhập bằng tài khoản nhân viên</p>
+    <div class="alert err" th:if="${param.error}">Sai tên đăng nhập hoặc mật khẩu.</div>
+    <div class="alert ok" th:if="${param.logout}">Bạn đã đăng xuất.</div>
+    <form th:action="@{/login}" method="post" class="stack">
+        <label>Tên đăng nhập <input name="username" autofocus required></label>
+        <label>Mật khẩu <input name="password" type="password" required></label>
+        <button type="submit" class="btn">Đăng nhập</button>
+    </form>
+    <p class="hint">Tài khoản mẫu: <b>thuthu</b> / 123456 (Thủ thư) · <b>qlsach</b> / 123456 (NV quản lý sách)</p>
+</main>
+</body>
+</html>

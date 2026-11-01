@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments :: head('Trang chủ')}"></head>
+<body>
+<header th:replace="~{fragments :: nav}"></header>
+<main class="page">
+    <h1>Hệ thống quản lý thư viện</h1>
+    <p class="muted">Xin chào <b sec:authentication="name"></b>. Chọn chức năng theo quyền của bạn.</p>
+    <div class="tiles">
+        <a class="tile" sec:authorize="hasRole('THU_THU')" th:href="@{/nhan-vien}"><span>👤</span>Nhân viên</a>
+        <a class="tile" sec:authorize="hasRole('QL_SACH')" th:href="@{/the-loai}"><span>🏷️</span>Thể loại</a>
+        <a class="tile" sec:authorize="hasRole('QL_SACH')" th:href="@{/nha-xuat-ban}"><span>🏢</span>Nhà xuất bản</a>
+        <a class="tile" sec:authorize="hasRole('QL_SACH')" th:href="@{/sach}"><span>📖</span>Quản lý đầu sách</a>
+        <a class="tile" sec:authorize="hasRole('THU_THU')" th:href="@{/doc-gia}"><span>🪪</span>Độc giả và thẻ</a>
+        <a class="tile" sec:authorize="hasRole('THU_THU')" th:href="@{/muon}"><span>📤</span>Mượn sách</a>
+        <a class="tile" sec:authorize="hasRole('THU_THU')" th:href="@{/tra}"><span>📥</span>Trả sách – Phạt</a>
+        <a class="tile" th:href="@{/thong-ke}"><span>📊</span>Thống kê</a>
+    </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Thể loại')}"></head>
+<body>
+<header th:replace="~{fragments :: nav}"></header>
+<main class="page">
+    <h1>Quản lý thể loại</h1>
+    <div th:replace="~{fragments :: flash}"></div>
+    <div class="grid2">
+        <form class="card stack" th:action="@{/the-loai/luu}" th:object="${tl}" method="post">
+            <h2 th:text="${capNhat} ? 'Cập nhật thể loại' : 'Thêm thể loại'">Thêm</h2>
+            <input type="hidden" name="capNhat" th:value="${capNhat}">
+            <label>Mã thể loại * <input th:field="*{maTheLoai}" th:readonly="${capNhat}" maxlength="20"></label>
+            <label>Tên thể loại * <input th:field="*{tenTheLoai}" maxlength="100"></label>
+            <div class="actions">
+                <button class="btn" type="submit" th:text="${capNhat} ? 'Cập nhật' : 'Thêm'">Lưu</button>
+                <a class="btn ghost" th:href="@{/the-loai}">Làm mới</a>
+            </div>
+        </form>
+        <div class="card">
+            <table>
+                <thead><tr><th>Mã</th><th>Tên thể loại</th><th></th></tr></thead>
+                <tbody>
+                <tr th:each="x : ${ds}">
+                    <td><a th:href="@{/the-loai(ma=${x.maTheLoai})}" th:text="${x.maTheLoai}"></a></td>
+                    <td th:text="${x.tenTheLoai}"></td>
+                    <td><form th:action="@{/the-loai/xoa}" method="post" onsubmit="return confirm('Xóa thể loại này?')">
+                        <input type="hidden" name="ma" th:value="${x.maTheLoai}"><button class="btn danger small">Xóa</button></form></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${title} + ' – Quản lý thư viện'">Quản lý thư viện</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+
+<header th:fragment="nav" class="topbar">
+    <a class="brand" th:href="@{/}">📚 Quản lý thư viện</a>
+    <nav>
+        <a sec:authorize="hasRole('THU_THU')" th:href="@{/nhan-vien}">Nhân viên</a>
+        <a sec:authorize="hasRole('QL_SACH')" th:href="@{/the-loai}">Thể loại</a>
+        <a sec:authorize="hasRole('QL_SACH')" th:href="@{/nha-xuat-ban}">NXB</a>
+        <a sec:authorize="hasRole('QL_SACH')" th:href="@{/sach}">Đầu sách</a>
+        <a sec:authorize="hasRole('THU_THU')" th:href="@{/doc-gia}">Độc giả &amp; thẻ</a>
+        <a sec:authorize="hasRole('THU_THU')" th:href="@{/muon}">Mượn sách</a>
+        <a sec:authorize="hasRole('THU_THU')" th:href="@{/tra}">Trả sách</a>
+        <a th:href="@{/thong-ke}">Thống kê</a>
+    </nav>
+    <form th:action="@{/logout}" method="post" class="user">
+        <span sec:authentication="name">user</span>
+        <button type="submit" class="btn ghost small">Đăng xuất</button>
+    </form>
+</header>
+
+<div th:fragment="flash">
+    <div class="alert ok" th:if="${ok}" th:text="${ok}"></div>
+    <div class="alert err" th:if="${loi}" th:text="${loi}"></div>
+</div>
+
+</body>
+</html>

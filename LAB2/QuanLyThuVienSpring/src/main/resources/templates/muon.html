@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Mượn sách')}"></head>
+<body>
+<header th:replace="~{fragments :: nav}"></header>
+<main class="page">
+    <h1>Lập phiếu mượn sách</h1>
+    <div th:replace="~{fragments :: flash}"></div>
+
+    <form class="card row end" th:action="@{/muon}" method="get">
+        <label>Độc giả
+            <select name="maDG" onchange="this.form.submit()">
+                <option value="">-- chọn độc giả --</option>
+                <option th:each="d : ${docGias}" th:value="${d.maDocGia}" th:text="${d.maDocGia + ' – ' + d.hoTen}"
+                        th:selected="${d.maDocGia == maDG}"></option>
+            </select>
+        </label>
+        <button class="btn ghost" type="submit">Kiểm tra điều kiện</button>
+        <span class="muted">Nhân viên lập phiếu: <b th:text="${nhanVien.hoTen}"></b></span>
+    </form>
+
+    <div th:if="${maDG != null and maDG != ''}">
+        <div class="alert ok" th:if="${dieuKienOk}" th:text="${dieuKienOk}"></div>
+        <div class="alert err" th:if="${dieuKienLoi}" th:text="'Không đủ điều kiện: ' + ${dieuKienLoi}"></div>
+
+        <div class="card" th:if="${!#lists.isEmpty(dangMuon)}">
+            <h2>Sách đang mượn</h2>
+            <table>
+                <thead><tr><th>Mã CT</th><th>Sách</th><th>Ngày mượn</th><th>Hẹn trả</th></tr></thead>
+                <tbody><tr th:each="c : ${dangMuon}">
+                    <td th:text="${c.maChiTiet}"></td><td th:text="${c.dauSach.tenSach}"></td>
+                    <td th:text="${#temporals.format(c.phieuMuon.ngayMuon,'dd/MM/yyyy')}"></td>
+                    <td th:text="${#temporals.format(c.phieuMuon.ngayHenTra,'dd/MM/yyyy')}"></td>
+                </tr></tbody>
+            </table>
+        </div>
+
+        <form class="card stack" th:action="@{/muon}" method="post" th:if="${dieuKienOk}">
+            <input type="hidden" name="maDG" th:value="${maDG}">
+            <h2>Chọn 1–3 đầu sách khác nhau (BR04, BR06)</h2>
+            <table>
+                <thead><tr><th></th><th>Mã</th><th>Tên sách</th><th>Thể loại</th><th>Còn</th></tr></thead>
+                <tbody><tr th:each="s : ${sachCon}">
+                    <td><input type="checkbox" class="chon" name="maDauSach" th:value="${s.maDauSach}"></td>
+                    <td th:text="${s.maDauSach}"></td><td th:text="${s.tenSach}"></td>
+                    <td th:text="${s.theLoai.tenTheLoai}"></td><td th:text="${s.soLuongHienCo}"></td>
+                </tr></tbody>
+            </table>
+            <div class="row end">
+                <label>Ngày mượn <input type="date" name="ngayMuon" th:value="${ngayMuon}"></label>
+                <label>Hẹn trả <input type="date" name="ngayHenTra" th:value="${ngayHenTra}"></label>
+                <button class="btn" type="submit">Lập phiếu mượn</button>
+            </div>
+        </form>
+    </div>
+</main>
+<script>
+    // Chặn chọn quá 3 đầu sách ngay trên giao diện; Service vẫn kiểm tra lại.
+    document.querySelectorAll('input.chon').forEach(function (cb) {
+        cb.addEventListener('change', function () {
+            if (document.querySelectorAll('input.chon:checked').length > 3) {
+                cb.checked = false;
+                alert('Chỉ được chọn tối đa 3 đầu sách khác nhau.');
+            }
+        });
+    });
+</script>
+</body>
+</html>
